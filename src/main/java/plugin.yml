@@ -1,0 +1,6 @@
+name: FarmingTycoon
+version: 1.0.5
+main: it.tristana.farming.Main
+description: Tycoon with Minecraft crops
+author: Massimiliano Micol
+depend: [TristanaCommons, WorldEdit, FastAsyncWorldEdit]
