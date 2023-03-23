@@ -5,15 +5,19 @@ import java.sql.SQLException;
 import org.bukkit.OfflinePlayer;
 
 import it.tristana.commons.database.DatabaseManager;
+import it.tristana.commons.helper.CommonsHelper;
+import it.tristana.farmingtycoon.Main;
 
 public class FarmingDatabase extends DatabaseManager<FarmingUser> {
 
+	private Main plugin;
 	private String tableIslands;
 	private String tableFarms;
 	private String tablePlayers;
 
-	public FarmingDatabase(String host, String database, String username, String password, int port, String tableIslands, String tableFarms, String tablePlayers) {
+	public FarmingDatabase(String host, String database, String username, String password, int port, Main plugin, String tableIslands, String tableFarms, String tablePlayers) {
 		super(host, database, username, password, port);
+		this.plugin = plugin;
 		this.tableIslands = tableIslands;
 		this.tableFarms = tableFarms;
 		this.tablePlayers = tablePlayers;
@@ -21,7 +25,22 @@ public class FarmingDatabase extends DatabaseManager<FarmingUser> {
 
 	@Override
 	public FarmingUser getUser(OfflinePlayer player) {
-
+		FarmingUser user = new FarmingUser(player);
+		executeQueryAsync("SELECT money, tablePlayers.island_id, grass_id, wheat_id, potato_id, carrot_id, sugar_cane_id,"
+				+ "	mushroom_id, cactus_id, sapling_id, water_lily_id, melon_id, pumpkin_id, sweet_berries_id,"
+				+ "	chorus_id, coral_id, cocoa_id, nether_wart_id, dead_bush_id FROM tableFarms LEFT JOIN"
+				+ "	tableIslands ON tablePlayers.island_id = tableIslands.id;", resultSet -> {
+					try {
+						if (!resultSet.next()) {
+							return;
+						}
+					} catch (SQLException e) {
+						sqlError(player, e);
+					}
+				}, error -> {
+					sqlError(player, error);
+				});
+		return user;
 	}
 
 	@Override
@@ -63,6 +82,7 @@ public class FarmingDatabase extends DatabaseManager<FarmingUser> {
 				+ "	cocoa_id INTEGER NOT NULL,"
 				+ "	nether_wart_id INTEGER NOT NULL,"
 				+ "	dead_bush_id INTEGER NOT NULL,"
+
 				+ " FOREIGN KEY (island_id) REFERENCES " + tableIslands + "(id) ON UPDATE CASCADE ON DELETE CASCADE,"
 				+ "	FOREIGN KEY (grass_id) REFERENCES " + tableFarms + "(id) ON UPDATE CASCADE ON DELETE CASCADE,"
 				+ "	FOREIGN KEY (wheat_id) REFERENCES " + tableFarms + "(id) ON UPDATE CASCADE ON DELETE CASCADE,"
@@ -82,5 +102,10 @@ public class FarmingDatabase extends DatabaseManager<FarmingUser> {
 				+ "	FOREIGN KEY (nether_wart_id) REFERENCES " + tableFarms + "(id) ON UPDATE CASCADE ON DELETE CASCADE,"
 				+ "	FOREIGN KEY (dead_bush_id) REFERENCES " + tableFarms + "(id) ON UPDATE CASCADE ON DELETE CASCADE"
 				+ ");");
+	}
+	
+	private void sqlError(OfflinePlayer player, SQLException e) {
+		CommonsHelper.consoleInfo("&cError while loading " + player.getName() + " (" + player.getUniqueId() + ")'s data!");
+		plugin.writeThrowableOnErrorsFile(e);
 	}
 }
