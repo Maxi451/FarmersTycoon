@@ -4,7 +4,21 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import it.tristana.farmingtycoon.Main;
 import it.tristana.farmingtycoon.config.SettingsFarm;
-import it.tristana.farmingtycoon.farm.builder.FarmBuilder;
+import it.tristana.farmingtycoon.farm.builder.CactusBuilder;
+import it.tristana.farmingtycoon.farm.builder.CarrotBuilder;
+import it.tristana.farmingtycoon.farm.builder.ChorusBuilder;
+import it.tristana.farmingtycoon.farm.builder.CocoaBuilder;
+import it.tristana.farmingtycoon.farm.builder.CoralBuilder;
+import it.tristana.farmingtycoon.farm.builder.DeadBushBuilder;
+import it.tristana.farmingtycoon.farm.builder.MelonBuilder;
+import it.tristana.farmingtycoon.farm.builder.MushroomBuilder;
+import it.tristana.farmingtycoon.farm.builder.NetherWartBuilder;
+import it.tristana.farmingtycoon.farm.builder.PotatoBuilder;
+import it.tristana.farmingtycoon.farm.builder.PumpkinBuilder;
+import it.tristana.farmingtycoon.farm.builder.SaplingBuilder;
+import it.tristana.farmingtycoon.farm.builder.SugarCaneBuilder;
+import it.tristana.farmingtycoon.farm.builder.SweetBerriesBuilder;
+import it.tristana.farmingtycoon.farm.builder.WaterLilyBuilder;
 import it.tristana.farmingtycoon.farm.builder.WheatBuilder;
 
 public enum FarmType {
@@ -26,9 +40,13 @@ public enum FarmType {
 	NETHER_WART(new NetherWartBuilder(), SettingsFarm::getNetherWartBaseIncome, SettingsFarm::getNetherWartBaseUpgradePrice),
 	DEAD_BUSH(new DeadBushBuilder(), SettingsFarm::getDeadBushBaseIncome, SettingsFarm::getDeadBushBaseUpgradePrice);
 
+	private static final FarmType[] types = values();
 	private static SettingsFarm settings;
 	static {
 		settings = JavaPlugin.getPlugin(Main.class).getSettingsFarm();
+		for (FarmType type : types) {
+			type.getBuilder().setIndex(type.ordinal());
+		}
 	}
 
 	private FarmBuilder builder;
