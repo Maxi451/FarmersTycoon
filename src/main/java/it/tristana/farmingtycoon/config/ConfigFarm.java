@@ -93,22 +93,7 @@ public class ConfigFarm extends Config {
 	public ConfigFarm(File folder) {
 		super(folder);
 	}
-	0.1,
-	2,
-	16,
-	47,
-	260,
-	1.4e3,
-	7.8e3,
-	4.4e4,
-	2.6e5,
-	1.6e6,
-	1e7,
-	6.5e7,
-	4.3e8,
-	2.9e9,
-	2e10,
-	1e11
+
 	@Override
 	protected void createDefault() {
 		set(WHEAT_BASE_INCOME, "0.1");
@@ -143,35 +128,35 @@ public class ConfigFarm extends Config {
 		set(WATER_LILY_BASE_BUY_PRICE, "1.05e8");
 		set(WATER_LILY_BASE_UPGRADE_PRICE, "");
 
-		set(MELON_BASE_INCOME, "0.2");
+		set(MELON_BASE_INCOME, "2.6e5");
 		set(MELON_BASE_BUY_PRICE, "1.2e9");
 		set(MELON_BASE_UPGRADE_PRICE, "");
 
-		set(PUMPKIN_BASE_INCOME, "0.2");
+		set(PUMPKIN_BASE_INCOME, "1.6e6");
 		set(PUMPKIN_BASE_BUY_PRICE, "8.5e9");
 		set(PUMPKIN_BASE_UPGRADE_PRICE, "");
 
-		set(SWEET_BERRIES_BASE_INCOME, "0.2");
+		set(SWEET_BERRIES_BASE_INCOME, "1e7");
 		set(SWEET_BERRIES_BASE_BUY_PRICE, "6.2e10");
 		set(SWEET_BERRIES_BASE_UPGRADE_PRICE, "");
 
-		set(CHORUS_BASE_INCOME, "0.2");
+		set(CHORUS_BASE_INCOME, "6.5e7");
 		set(CHORUS_BASE_BUY_PRICE, "4e11");
 		set(CHORUS_BASE_UPGRADE_PRICE, "");
 
-		set(CORAL_BASE_INCOME, "0.2");
+		set(CORAL_BASE_INCOME, "4.3e8");
 		set(CORAL_BASE_BUY_PRICE, "2.8e12");
 		set(CORAL_BASE_UPGRADE_PRICE, "");
 
-		set(COCOA_BASE_INCOME, "0.2");
+		set(COCOA_BASE_INCOME, "2.9e9");
 		set(COCOA_BASE_BUY_PRICE, "1.4e13");
 		set(COCOA_BASE_UPGRADE_PRICE, "");
 
-		set(NETHER_WART_BASE_INCOME, "0.2");
+		set(NETHER_WART_BASE_INCOME, "2e10");
 		set(NETHER_WART_BASE_BUY_PRICE, "1.26e14");
 		set(NETHER_WART_BASE_UPGRADE_PRICE, "");
 
-		set(DEAD_BUSH_BASE_INCOME, "0.2");
+		set(DEAD_BUSH_BASE_INCOME, "1e11");
 		set(DEAD_BUSH_BASE_BUY_PRICE, "6.15e15");
 		set(DEAD_BUSH_BASE_UPGRADE_PRICE, "");
 	}
