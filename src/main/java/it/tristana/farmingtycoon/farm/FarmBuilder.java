@@ -9,7 +9,7 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.type.Farmland;
 
-sealed class FarmBuilder permits CactusBuilder, CocoaBuilder, CoralBuilder, DirectionalFarmBuilder, MushroomBuilder, SugarCaneBuilder {
+sealed class FarmBuilder permits CactusBuilder, DirectionalFarmBuilder, MushroomBuilder, SugarCaneBuilder {
 
 	private static final int X_OFFSET = 10;
 	private static final int Y_OFFSET = 3;

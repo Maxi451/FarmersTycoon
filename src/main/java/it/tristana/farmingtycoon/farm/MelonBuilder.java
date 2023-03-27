@@ -15,6 +15,6 @@ final class MelonBuilder extends DirectionalFarmBuilder {
 
 	@Override
 	protected Material getTerrainAt(int row, int column) {
-		return (row ^ column) % 2 == 0 ? Material.SAND : Material.WATER;
+		return Material.GRASS_BLOCK;
 	}
 }

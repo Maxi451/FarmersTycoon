@@ -25,6 +25,11 @@ public class ConfigFarm extends Config {
 	public static final String CARROT_BASE_BUY_PRICE = CARROT + BASE_BUY_PRICE;
 	public static final String CARROT_BASE_UPGRADE_PRICE = CARROT + BASE_UPGRADE_PRICE;
 
+	private static final String BEETROOT = "beetroot.";
+	public static final String BEETROOT_BASE_INCOME = BEETROOT + BASE_INCOME;
+	public static final String BEETROOT_BASE_BUY_PRICE = BEETROOT + BASE_BUY_PRICE;
+	public static final String BEETROOT_BASE_UPGRADE_PRICE = BEETROOT + BASE_UPGRADE_PRICE;
+
 	private static final String SUGAR_CANE = "sugar-cane.";
 	public static final String SUGAR_CANE_BASE_INCOME = SUGAR_CANE + BASE_INCOME;
 	public static final String SUGAR_CANE_BASE_BUY_PRICE = SUGAR_CANE + BASE_BUY_PRICE;
@@ -70,11 +75,6 @@ public class ConfigFarm extends Config {
 	public static final String CHORUS_BASE_BUY_PRICE = CHORUS + BASE_BUY_PRICE;
 	public static final String CHORUS_BASE_UPGRADE_PRICE = CHORUS + BASE_UPGRADE_PRICE;
 
-	private static final String CORAL = "coral.";
-	public static final String CORAL_BASE_INCOME = CORAL + BASE_INCOME;
-	public static final String CORAL_BASE_BUY_PRICE = CORAL + BASE_BUY_PRICE;
-	public static final String CORAL_BASE_UPGRADE_PRICE = CORAL + BASE_UPGRADE_PRICE;
-
 	private static final String COCOA = "cocoa.";
 	public static final String COCOA_BASE_INCOME = COCOA + BASE_INCOME;
 	public static final String COCOA_BASE_BUY_PRICE = COCOA + BASE_BUY_PRICE;
@@ -98,66 +98,66 @@ public class ConfigFarm extends Config {
 	protected void createDefault() {
 		set(WHEAT_BASE_INCOME, "0.1");
 		set(WHEAT_BASE_BUY_PRICE, "25");
-		set(WHEAT_BASE_UPGRADE_PRICE, "");
+		set(WHEAT_BASE_UPGRADE_PRICE, "100");
 
 		set(POTATO_BASE_INCOME, "2");
 		set(POTATO_BASE_BUY_PRICE, "1e3");
-		set(POTATO_BASE_UPGRADE_PRICE, "");
+		set(POTATO_BASE_UPGRADE_PRICE, "5e3");
 
 		set(CARROT_BASE_INCOME, "16");
 		set(CARROT_BASE_BUY_PRICE, "1.25e4");
-		set(CARROT_BASE_UPGRADE_PRICE, "");
+		set(CARROT_BASE_UPGRADE_PRICE, "1e5");
 
-		set(SUGAR_CANE_BASE_INCOME, "47");
-		set(SUGAR_CANE_BASE_BUY_PRICE, "4.4e4");
-		set(SUGAR_CANE_BASE_UPGRADE_PRICE, "");
+		set(BEETROOT_BASE_INCOME, "47");
+		set(BEETROOT_BASE_BUY_PRICE, "4.4e4");
+		set(BEETROOT_BASE_UPGRADE_PRICE, "4.2e5");
 
 		set(MUSHROOM_BASE_INCOME, "260");
 		set(MUSHROOM_BASE_BUY_PRICE, "2.75e5");
-		set(MUSHROOM_BASE_UPGRADE_PRICE, "");
+		set(MUSHROOM_BASE_UPGRADE_PRICE, "1.6e6");
 
 		set(CACTUS_BASE_INCOME, "1.4e3");
 		set(CACTUS_BASE_BUY_PRICE, "1.8e6");
-		set(CACTUS_BASE_UPGRADE_PRICE, "");
+		set(CACTUS_BASE_UPGRADE_PRICE, "7.8e6");
 
 		set(SAPLING_BASE_INCOME, "7.8e3");
 		set(SAPLING_BASE_BUY_PRICE, "1.2e7");
-		set(SAPLING_BASE_UPGRADE_PRICE, "");
+		set(SAPLING_BASE_UPGRADE_PRICE, "1.5e8");
 
 		set(WATER_LILY_BASE_INCOME, "4.4e4");
 		set(WATER_LILY_BASE_BUY_PRICE, "1.05e8");
-		set(WATER_LILY_BASE_UPGRADE_PRICE, "");
+		set(WATER_LILY_BASE_UPGRADE_PRICE, "2e9");
 
 		set(MELON_BASE_INCOME, "2.6e5");
 		set(MELON_BASE_BUY_PRICE, "1.2e9");
-		set(MELON_BASE_UPGRADE_PRICE, "");
+		set(MELON_BASE_UPGRADE_PRICE, "3e10");
 
 		set(PUMPKIN_BASE_INCOME, "1.6e6");
 		set(PUMPKIN_BASE_BUY_PRICE, "8.5e9");
-		set(PUMPKIN_BASE_UPGRADE_PRICE, "");
+		set(PUMPKIN_BASE_UPGRADE_PRICE, "4e11");
 
 		set(SWEET_BERRIES_BASE_INCOME, "1e7");
 		set(SWEET_BERRIES_BASE_BUY_PRICE, "6.2e10");
-		set(SWEET_BERRIES_BASE_UPGRADE_PRICE, "");
+		set(SWEET_BERRIES_BASE_UPGRADE_PRICE, "6.5e12");
 
 		set(CHORUS_BASE_INCOME, "6.5e7");
 		set(CHORUS_BASE_BUY_PRICE, "4e11");
-		set(CHORUS_BASE_UPGRADE_PRICE, "");
+		set(CHORUS_BASE_UPGRADE_PRICE, "1.2e13");
 
-		set(CORAL_BASE_INCOME, "4.3e8");
-		set(CORAL_BASE_BUY_PRICE, "2.8e12");
-		set(CORAL_BASE_UPGRADE_PRICE, "");
+		set(SUGAR_CANE_BASE_INCOME, "4.3e8");
+		set(SUGAR_CANE_BASE_BUY_PRICE, "2.8e12");
+		set(SUGAR_CANE_BASE_UPGRADE_PRICE, "8.4e13");
 
 		set(COCOA_BASE_INCOME, "2.9e9");
 		set(COCOA_BASE_BUY_PRICE, "1.4e13");
-		set(COCOA_BASE_UPGRADE_PRICE, "");
+		set(COCOA_BASE_UPGRADE_PRICE, "5e15");
 
 		set(NETHER_WART_BASE_INCOME, "2e10");
 		set(NETHER_WART_BASE_BUY_PRICE, "1.26e14");
-		set(NETHER_WART_BASE_UPGRADE_PRICE, "");
+		set(NETHER_WART_BASE_UPGRADE_PRICE, "6e16");
 
 		set(DEAD_BUSH_BASE_INCOME, "1e11");
 		set(DEAD_BUSH_BASE_BUY_PRICE, "6.15e15");
-		set(DEAD_BUSH_BASE_UPGRADE_PRICE, "");
+		set(DEAD_BUSH_BASE_UPGRADE_PRICE, "1e18");
 	}
 }

@@ -2,7 +2,7 @@ package it.tristana.farmingtycoon.farm;
 
 import org.bukkit.Material;
 
-public class SugarCaneBuilder extends FarmBuilder {
+final class SugarCaneBuilder extends FarmBuilder {
 
 	@Override
 	protected Material getCropAt(int row, int column, int height) {

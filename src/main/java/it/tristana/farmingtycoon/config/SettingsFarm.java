@@ -19,6 +19,10 @@ public class SettingsFarm extends Settings<ConfigFarm> {
 	private double carrotBaseBuyPrice;
 	private double carrotBaseUpgradePrice;
 
+	private double beetrootBaseIncome;
+	private double beetrootBaseBuyPrice;
+	private double beetrootBaseUpgradePrice;
+
 	private double sugarCaneBaseIncome;
 	private double sugarCaneBaseBuyPrice;
 	private double sugarCaneBaseUpgradePrice;
@@ -55,10 +59,6 @@ public class SettingsFarm extends Settings<ConfigFarm> {
 	private double chorusBaseBuyPrice;
 	private double chorusBaseUpgradePrice;
 
-	private double coralBaseIncome;
-	private double coralBaseBuyPrice;
-	private double coralBaseUpgradePrice;
-
 	private double cocoaBaseIncome;
 	private double cocoaBaseBuyPrice;
 	private double cocoaBaseUpgradePrice;
@@ -88,6 +88,10 @@ public class SettingsFarm extends Settings<ConfigFarm> {
 		carrotBaseIncome = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.CARROT_BASE_INCOME), 0.2);
 		carrotBaseBuyPrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.CARROT_BASE_BUY_PRICE), 25);
 		carrotBaseUpgradePrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.CARROT_BASE_UPGRADE_PRICE), 0);
+
+		beetrootBaseIncome = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.BEETROOT_BASE_INCOME), 0.2);
+		beetrootBaseBuyPrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.BEETROOT_BASE_BUY_PRICE), 25);
+		beetrootBaseUpgradePrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.BEETROOT_BASE_UPGRADE_PRICE), 0);
 
 		sugarCaneBaseIncome = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.SUGAR_CANE_BASE_INCOME), 0.2);
 		sugarCaneBaseBuyPrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.SUGAR_CANE_BASE_BUY_PRICE), 25);
@@ -124,10 +128,6 @@ public class SettingsFarm extends Settings<ConfigFarm> {
 		chorusBaseIncome = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.CHORUS_BASE_INCOME), 0.2);
 		chorusBaseBuyPrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.CHORUS_BASE_BUY_PRICE), 25);
 		chorusBaseUpgradePrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.CHORUS_BASE_UPGRADE_PRICE), 0);
-
-		coralBaseIncome = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.CORAL_BASE_INCOME), 0.2);
-		coralBaseBuyPrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.CORAL_BASE_BUY_PRICE), 25);
-		coralBaseUpgradePrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.CORAL_BASE_UPGRADE_PRICE), 0);
 
 		cocoaBaseIncome = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.COCOA_BASE_INCOME), 0.2);
 		cocoaBaseBuyPrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.COCOA_BASE_BUY_PRICE), 25);
@@ -176,6 +176,18 @@ public class SettingsFarm extends Settings<ConfigFarm> {
 
 	public double getCarrotBaseUpgradePrice() {
 		return carrotBaseUpgradePrice;
+	}
+
+	public double getBeetrootBaseIncome() {
+		return beetrootBaseIncome;
+	}
+
+	public double getBeetrootBaseBuyPrice() {
+		return beetrootBaseBuyPrice;
+	}
+
+	public double getBeetrootBaseUpgradePrice() {
+		return beetrootBaseUpgradePrice;
 	}
 
 	public double getSugarCaneBaseIncome() {
@@ -284,18 +296,6 @@ public class SettingsFarm extends Settings<ConfigFarm> {
 
 	public double getChorusBaseUpgradePrice() {
 		return chorusBaseUpgradePrice;
-	}
-
-	public double getCoralBaseIncome() {
-		return coralBaseIncome;
-	}
-
-	public double getCoralBaseBuyPrice() {
-		return coralBaseBuyPrice;
-	}
-
-	public double getCoralBaseUpgradePrice() {
-		return coralBaseUpgradePrice;
 	}
 
 	public double getCocoaBaseIncome() {

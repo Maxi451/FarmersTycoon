@@ -9,12 +9,12 @@ final class PumpkinBuilder extends DirectionalFarmBuilder {
 	}
 
 	@Override
-	protected Material getCropAt(int row, int column) {
-		return (row ^ column) % 2 == 0 ? Material.SUGAR_CANE : Material.AIR;
+	protected Material getCropAt(int row, int column, int height) {
+		return (row ^ column) % 2 == 0 ? Material.PUMPKIN : Material.ATTACHED_PUMPKIN_STEM;
 	}
-	
+
 	@Override
 	protected Material getTerrainAt(int row, int column) {
-		return (row ^ column) % 2 == 0 ? Material.SAND : Material.WATER;
+		return Material.GRASS_BLOCK;
 	}
 }

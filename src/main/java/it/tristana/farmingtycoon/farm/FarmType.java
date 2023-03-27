@@ -12,6 +12,7 @@ public enum FarmType {
 	WHEAT(new FarmBuilder(Material.FARMLAND, Material.WHEAT), SettingsFarm::getWheatBaseIncome, SettingsFarm::getWheatBaseUpgradePrice),
 	POTATO(new FarmBuilder(Material.FARMLAND, Material.POTATOES), SettingsFarm::getPotatoBaseIncome, SettingsFarm::getPotatoBaseUpgradePrice),
 	CARROT(new FarmBuilder(Material.FARMLAND, Material.CARROTS), SettingsFarm::getCarrotBaseIncome, SettingsFarm::getCarrotBaseUpgradePrice),
+	BEETROOT(new FarmBuilder(Material.FARMLAND, Material.BEETROOTS), SettingsFarm::getBeetrootBaseIncome, SettingsFarm::getBeetrootBaseUpgradePrice),
 	SUGAR_CANE(new SugarCaneBuilder(), SettingsFarm::getSugarCaneBaseIncome, SettingsFarm::getSugarCaneBaseUpgradePrice),
 	MUSHROOM(new MushroomBuilder(), SettingsFarm::getMushroomBaseIncome, SettingsFarm::getMushroomBaseUpgradePrice),
 	CACTUS(new CactusBuilder(), SettingsFarm::getCactusBaseIncome, SettingsFarm::getCactusBaseUpgradePrice),
@@ -21,7 +22,6 @@ public enum FarmType {
 	PUMPKIN(new PumpkinBuilder(), SettingsFarm::getPumpkinBaseIncome, SettingsFarm::getPumpkinBaseUpgradePrice),
 	SWEET_BERRIES(new FarmBuilder(Material.PODZOL, Material.SWEET_BERRY_BUSH), SettingsFarm::getSweetBerriesBaseIncome, SettingsFarm::getSweetBerriesBaseUpgradePrice),
 	CHORUS(new FarmBuilder(Material.END_STONE, Material.CHORUS_FLOWER), SettingsFarm::getChorusBaseIncome, SettingsFarm::getChorusBaseUpgradePrice),
-	CORAL(new CoralBuilder(), SettingsFarm::getCoralBaseIncome, SettingsFarm::getCoralBaseUpgradePrice),
 	COCOA(new CocoaBuilder(), SettingsFarm::getCocoaBaseIncome, SettingsFarm::getCocoaBaseUpgradePrice),
 	NETHER_WART(new FarmBuilder(Material.SOUL_SAND, Material.NETHER_WART), SettingsFarm::getNetherWartBaseIncome, SettingsFarm::getNetherWartBaseUpgradePrice),
 	DEAD_BUSH(new FarmBuilder(Material.SAND, Material.DEAD_BUSH), SettingsFarm::getDeadBushBaseIncome, SettingsFarm::getDeadBushBaseUpgradePrice);
@@ -43,6 +43,10 @@ public enum FarmType {
 		this.builder = builder;
 		this.baseIncomeSupplier = baseIncomeSupplier;
 		this.baseUpgradePriceSupplier = baseUpgradePriceSupplier;
+	}
+	
+	public static FarmType[] getTypes() {
+		return types;
 	}
 
 	public void build(World world, Island island, int row) {
