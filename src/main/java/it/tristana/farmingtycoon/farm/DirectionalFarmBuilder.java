@@ -18,10 +18,11 @@ sealed abstract class DirectionalFarmBuilder extends FarmBuilder permits CocoaBu
 		if (updateStem(block, BlockFace.WEST, directional)) {
 			return;
 		}
+
 		updateStem(block, BlockFace.EAST, directional);
 	}
 
-	private boolean updateStem(Block block, BlockFace face, Directional directional) {
+	protected final boolean updateStem(Block block, BlockFace face, Directional directional) {
 		boolean flag = block.getRelative(face).getType() == directionalType;
 		if (flag) {
 			directional.setFacing(face);

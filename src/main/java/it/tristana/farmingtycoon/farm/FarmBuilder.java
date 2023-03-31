@@ -64,13 +64,18 @@ sealed class FarmBuilder permits CactusBuilder, DirectionalFarmBuilder, Mushroom
 		for (int i = x; i < x + width; x ++) {
 			for (int iii = y; iii < y + height; iii ++) {
 				Block block = world.getBlockAt(i, iii, z);
-				block.setType(getCropAt(row, i - x, iii - y));
+				block.setType(getCropAt(row, i - x, iii - y), false);
 				checkAge(block);
-				checkDirection(block);
+			}
+		}
+
+		for (int i = x; i < x + width; x ++) {
+			for (int iii = y; iii < y + height; iii ++) {
+				checkDirection(world.getBlockAt(i, iii, z));
 			}
 		}
 	}
-	
+
 	final void checkDirection(Block block) {
 		BlockData data = block.getBlockData();
 		if (data instanceof Directional directional) {
@@ -104,6 +109,6 @@ sealed class FarmBuilder permits CactusBuilder, DirectionalFarmBuilder, Mushroom
 	int getCropHeight() {
 		return 1;
 	}
-	
+
 	void updateDirection(Block block, Directional directional) {}
 }
