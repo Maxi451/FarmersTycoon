@@ -30,10 +30,7 @@ public class FarmingDatabase extends DatabaseManager<FarmingUser> {
 	@Override
 	public FarmingUser getUser(OfflinePlayer player) {
 		FarmingUser user = new FarmingUser(player);
-		executeQueryAsync("SELECT money, grass_id, wheat_id, potato_id, carrot_id, beetroot_id, sugar_cane_id,"
-				+ "	mushroom_id, cactus_id, sapling_id, water_lily_id, melon_id, pumpkin_id, sweet_berries_id,"
-				+ "	chorus_id, cocoa_id, nether_wart_id, dead_bush_id, " + tableIslands + ".id AS island_id, pos_x, pos_y FROM " + tableFarms + "LEFT JOIN"
-				+ "	" + tableIslands + " ON " + tablePlayers + ".island_id = " + tableIslands + ".id;", resultSet -> {
+		executeQueryAsync("SELECT ", resultSet -> {
 					if (!resultSet.next()) {
 						createIsland(user);
 						return;
@@ -55,103 +52,37 @@ public class FarmingDatabase extends DatabaseManager<FarmingUser> {
 	@Override
 	public void createTables() throws SQLException {
 		executeUpdate("CREATE TABLE IF NOT EXISTS " + tableIslands + " ("
-				+ "	id INTEGER PRIMARY KEY AUTO_INCREMENT,"
+				+ "	player_uuid CHAR(36) PRIMARY KEY,"
 				+ "	pos_x INTEGER NOT NULL,"
 				+ "	pos_y INTEGER NOT NULL"
 				+ ");");
 		executeUpdate("CREATE TABLE IF NOT EXISTS " + tableFarms + " ("
-				+ "	id INTEGER PRIMARY KEY AUTO_INCREMENT,"
+				+ " player_uuid CHAR(36),"
+				+ "	farm_type INTEGER,"
 				+ "	amount INTEGER NOT NULL DEFAULT 0,"
 				+ "	level INTEGER NOT NULL DEFAULT 0,"
-				+ "	total_income DECIMAL(53, 3) UNSIGNED NOT NULL DEFAULT 0"
+				+ "	total_income DECIMAL(53, 3) UNSIGNED NOT NULL DEFAULT 0,"
+				+ " PRIMARY KEY (player_uuid, farm_type),"
+				+ " FOREIGN KEY (player_uuid) REFERENCES " + tablePlayers + "(uuid)"
 				+ ");");
 		executeUpdate("CREATE TABLE IF NOT EXISTS " + tablePlayers + "("
 				+ "	uuid CHAR(36) PRIMARY KEY,"
-				+ "	money DECIMAL(53, 3) UNSIGNED NOT NULL DEFAULT 0,"
-				+ "	island_id INTEGER NOT NULL,"
-				+ "	grass_id INTEGER NOT NULL,"
-				+ "	wheat_id INTEGER NOT NULL,"
-				+ "	potato_id INTEGER NOT NULL,"
-				+ "	carrot_id INTEGER NOT NULL,"
-				+ "	beetroot_id INTEGER NOT NULL,"
-				+ "	sugar_cane_id INTEGER NOT NULL,"
-				+ "	mushroom_id INTEGER NOT NULL,"
-				+ "	cactus_id INTEGER NOT NULL,"
-				+ "	sapling_id INTEGER NOT NULL,"
-				+ "	water_lily_id INTEGER NOT NULL,"
-				+ "	melon_id INTEGER NOT NULL,"
-				+ "	pumpkin_id INTEGER NOT NULL,"
-				+ "	sweet_berries_id INTEGER NOT NULL,"
-				+ "	chorus_id INTEGER NOT NULL,"
-				+ "	cocoa_id INTEGER NOT NULL,"
-				+ "	nether_wart_id INTEGER NOT NULL,"
-				+ "	dead_bush_id INTEGER NOT NULL,"
-				+ " FOREIGN KEY (island_id) REFERENCES " + tableIslands + "(id) ON UPDATE CASCADE ON DELETE CASCADE,"
-				+ "	FOREIGN KEY (grass_id) REFERENCES " + tableFarms + "(id) ON UPDATE CASCADE ON DELETE CASCADE,"
-				+ "	FOREIGN KEY (wheat_id) REFERENCES " + tableFarms + "(id) ON UPDATE CASCADE ON DELETE CASCADE,"
-				+ "	FOREIGN KEY (potato_id) REFERENCES " + tableFarms + "(id) ON UPDATE CASCADE ON DELETE CASCADE,"
-				+ "	FOREIGN KEY (carrot_id) REFERENCES " + tableFarms + "(id) ON UPDATE CASCADE ON DELETE CASCADE,"
-				+ "	FOREIGN KEY (beetroot_id) REFERENCES " + tableFarms + "(id) ON UPDATE CASCADE ON DELETE CASCADE,"
-				+ "	FOREIGN KEY (sugar_cane_id) REFERENCES " + tableFarms + "(id) ON UPDATE CASCADE ON DELETE CASCADE,"
-				+ "	FOREIGN KEY (mushroom_id) REFERENCES " + tableFarms + "(id) ON UPDATE CASCADE ON DELETE CASCADE,"
-				+ "	FOREIGN KEY (cactus_id) REFERENCES " + tableFarms + "(id) ON UPDATE CASCADE ON DELETE CASCADE,"
-				+ "	FOREIGN KEY (sapling_id) REFERENCES " + tableFarms + "(id) ON UPDATE CASCADE ON DELETE CASCADE,"
-				+ "	FOREIGN KEY (water_lily_id) REFERENCES " + tableFarms + "(id) ON UPDATE CASCADE ON DELETE CASCADE,"
-				+ "	FOREIGN KEY (melon_id) REFERENCES " + tableFarms + "(id) ON UPDATE CASCADE ON DELETE CASCADE,"
-				+ "	FOREIGN KEY (pumpkin_id) REFERENCES " + tableFarms + "(id) ON UPDATE CASCADE ON DELETE CASCADE,"
-				+ "	FOREIGN KEY (sweet_berries_id) REFERENCES " + tableFarms + "(id) ON UPDATE CASCADE ON DELETE CASCADE,"
-				+ "	FOREIGN KEY (chorus_id) REFERENCES " + tableFarms + "(id) ON UPDATE CASCADE ON DELETE CASCADE,"
-				+ "	FOREIGN KEY (cocoa_id) REFERENCES " + tableFarms + "(id) ON UPDATE CASCADE ON DELETE CASCADE,"
-				+ "	FOREIGN KEY (nether_wart_id) REFERENCES " + tableFarms + "(id) ON UPDATE CASCADE ON DELETE CASCADE,"
-				+ "	FOREIGN KEY (dead_bush_id) REFERENCES " + tableFarms + "(id) ON UPDATE CASCADE ON DELETE CASCADE"
+				+ "	money DECIMAL(53, 3) UNSIGNED NOT NULL DEFAULT 0"
 				+ ");");
 	}
-
+// select money, amount, farm_type, level, total_income, pos_x, pos_y from tableplayers left join tablefarms on tableplayers.uuid = tablefarms.player_uuid left join tableislands on tableplayers.uuid = tableislands.player_uuid where uuid = 'bla'
 	private void parseUser(FarmingUser user, ResultSet resultSet) throws SQLException {
 		double money = resultSet.getDouble("money");
-		Island island = parseIsland(resultSet);
+		Island island = parseIsland(user, resultSet);
 		Farm[] farms = parseFarms(user, resultSet);
 		user.load(money, island, farms);
 	}
 
-	private Island parseIsland(ResultSet resultSet) throws SQLException {
-		int id = resultSet.getInt("island_id");
+	private Island parseIsland(FarmingUser user, ResultSet resultSet) throws SQLException {
 		int posX = resultSet.getInt("pos_x");
 		int posZ = resultSet.getInt("pos_z");
-		return new Island(id, posX, 64, posZ);
+		return new Island(user, posX, 64, posZ);
 	}
-
-	private Farm[] parseFarms(FarmingUser user, ResultSet resultSet) throws SQLException {
-		return new Farm[] {
-				getFarm(user, FarmType.WHEAT, resultSet.getInt("wheat_id")),
-				getFarm(user, FarmType.POTATO, resultSet.getInt("potato_id")),
-				getFarm(user, FarmType.CARROT, resultSet.getInt("carrot_id")),
-				getFarm(user, FarmType.BEETROOT, resultSet.getInt("beetroot_id")),
-				getFarm(user, FarmType.SUGAR_CANE, resultSet.getInt("sugar_cane_id")),
-				getFarm(user, FarmType.MUSHROOM, resultSet.getInt("mushroom_id")),
-				getFarm(user, FarmType.CACTUS, resultSet.getInt("cactus_id")),
-				getFarm(user, FarmType.SAPLING, resultSet.getInt("sapling_id")),
-				getFarm(user, FarmType.WATER_LILY, resultSet.getInt("water_lily_id")),
-				getFarm(user, FarmType.MELON, resultSet.getInt("melon_id")),
-				getFarm(user, FarmType.PUMPKIN, resultSet.getInt("pumpkin_id")),
-				getFarm(user, FarmType.SWEET_BERRIES, resultSet.getInt("sweet_berries_id")),
-				getFarm(user, FarmType.CHORUS, resultSet.getInt("chorus_id")),
-				getFarm(user, FarmType.COCOA, resultSet.getInt("cocoa_id")),
-				getFarm(user, FarmType.NETHER_WART, resultSet.getInt("nether_wart_id")),
-				getFarm(user, FarmType.DEAD_BUSH, resultSet.getInt("dead_bush_id"))
-		};
-	}
-
-	private Farm getFarm(FarmingUser user, FarmType type, int id) throws SQLException {
-		return executeQuery("SELECT amount, level, total_income FROM " + tableIslands + " WHERE id = " + id + ";", resultSet -> {
-			if (!resultSet.next()) {
-				throw new SQLException("Farm entry " + id + " for " + user.getPlayer().getUniqueId() + " not found!");
-			}
-
-			int amount = resultSet.getInt("amount");
-			int level = resultSet.getInt("level");
-			double totalIncome = resultSet.getDouble("total_income");
-			return new Farm(user, type, amount, level, totalIncome);
-		});
-	}
+	
+	private Farm[] parseFarms(user, )
 }
