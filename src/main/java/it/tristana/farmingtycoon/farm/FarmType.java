@@ -45,8 +45,12 @@ public enum FarmType {
 		this.baseUpgradePriceSupplier = baseUpgradePriceSupplier;
 	}
 	
-	public static FarmType[] getTypes() {
-		return types;
+	public static FarmType get(int ordinal) {
+		return ordinal >= 0 && ordinal < types.length ? types[ordinal] : null;
+	}
+	
+	public static int length() {
+		return types.length;
 	}
 
 	public void build(World world, Island island, int row) {

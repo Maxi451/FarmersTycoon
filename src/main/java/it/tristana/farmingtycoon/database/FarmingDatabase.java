@@ -11,17 +11,20 @@ import it.tristana.farmingtycoon.Main;
 import it.tristana.farmingtycoon.farm.Farm;
 import it.tristana.farmingtycoon.farm.FarmType;
 import it.tristana.farmingtycoon.farm.Island;
+import it.tristana.farmingtycoon.farm.IslandsManager;
 
 public class FarmingDatabase extends DatabaseManager<FarmingUser> {
 
-	private Main plugin;
-	private String tableIslands;
-	private String tableFarms;
-	private String tablePlayers;
+	private final Main plugin;
+	private final IslandsManager islandsBroker;
+	private final String tableIslands;
+	private final String tableFarms;
+	private final String tablePlayers;
 
 	public FarmingDatabase(String host, String database, String username, String password, int port, Main plugin, String tableIslands, String tableFarms, String tablePlayers) {
 		super(host, database, username, password, port);
 		this.plugin = plugin;
+		this.islandsBroker = plugin.getIslandsBroker();
 		this.tableIslands = tableIslands;
 		this.tableFarms = tableFarms;
 		this.tablePlayers = tablePlayers;
@@ -30,9 +33,11 @@ public class FarmingDatabase extends DatabaseManager<FarmingUser> {
 	@Override
 	public FarmingUser getUser(OfflinePlayer player) {
 		FarmingUser user = new FarmingUser(player);
-		executeQueryAsync("SELECT ", resultSet -> {
-					if (!resultSet.next()) {
-						createIsland(user);
+		executeQueryAsync(String.format("SELECT money, amount, farm_type, level, total_income, pos_x, pos_y"
+				+ " from %s left join %s on %s.uuid = %s.player_uuid left join %s on %s.uuid = %s.player_uuid"
+				+ " where uuid = '%s'", tablePlayers, tableFarms, tableIslands, tablePlayers, tableIslands, getUuid(user.getPlayer())), resultSet -> {
+					if (!resultSet.isBeforeFirst()) {
+						islandsBroker.generate(user);
 						return;
 					}
 
@@ -46,7 +51,7 @@ public class FarmingDatabase extends DatabaseManager<FarmingUser> {
 
 	@Override
 	public void saveUser(FarmingUser user) {
-		
+
 	}
 
 	@Override
@@ -70,19 +75,39 @@ public class FarmingDatabase extends DatabaseManager<FarmingUser> {
 				+ "	money DECIMAL(53, 3) UNSIGNED NOT NULL DEFAULT 0"
 				+ ");");
 	}
-// select money, amount, farm_type, level, total_income, pos_x, pos_y from tableplayers left join tablefarms on tableplayers.uuid = tablefarms.player_uuid left join tableislands on tableplayers.uuid = tableislands.player_uuid where uuid = 'bla'
+
 	private void parseUser(FarmingUser user, ResultSet resultSet) throws SQLException {
-		double money = resultSet.getDouble("money");
-		Island island = parseIsland(user, resultSet);
 		Farm[] farms = parseFarms(user, resultSet);
+		Island island = parseIsland(user, resultSet);
+		double money = resultSet.getDouble("money");
 		user.load(money, island, farms);
 	}
 
 	private Island parseIsland(FarmingUser user, ResultSet resultSet) throws SQLException {
 		int posX = resultSet.getInt("pos_x");
 		int posZ = resultSet.getInt("pos_z");
-		return new Island(user, posX, 64, posZ);
+		return new Island(user, posX, islandsBroker.getIslandsHeight(), posZ);
 	}
-	
-	private Farm[] parseFarms(user, )
+
+	private Farm[] parseFarms(FarmingUser user, ResultSet resultSet) throws SQLException {
+		Farm[] farms = new Farm[FarmType.length()];
+		for (int i = 0; i < farms.length; i ++) {
+			if (!resultSet.next()) {
+				throw new SQLException("Wrong farm count! Expected " + farms.length + " but got " + i + " for " + getUuid(user.getPlayer()));
+			}
+
+			farms[i] = parseFarm(user, resultSet);
+		}
+		return farms;
+	}
+
+	private Farm parseFarm(FarmingUser user, ResultSet resultSet) throws SQLException {
+		int id = resultSet.getInt("farm_type");
+		FarmType type = FarmType.get(id);
+		if (type == null) {
+			throw new SQLException("Unknown FarmType ordinal " + id + " for " + getUuid(user.getPlayer()));
+		}
+
+		return new Farm(user, type, resultSet.getInt("amount"), resultSet.getInt("level"), resultSet.getDouble("total_income"));
+	}
 }

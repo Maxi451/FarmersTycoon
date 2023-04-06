@@ -14,12 +14,18 @@ public class FarmingUser extends BasicUser implements BalanceHolder, Tickable {
 	private volatile Island island;
 	private volatile Farm[] farms;
 
+	private volatile boolean isLoaded;
+
 	public FarmingUser(OfflinePlayer player) {
 		super(player);
 	}
-	
+
 	@Override
 	public void runTick() {
+		if (!isLoaded) {
+			return;
+		}
+
 		for (Farm farm : farms) {
 			farm.runTick();
 		}
@@ -44,9 +50,10 @@ public class FarmingUser extends BasicUser implements BalanceHolder, Tickable {
 		return flag;
 	}
 
-	public void load(double money, Island island, Farm[] farms) {
+	public synchronized void load(double money, Island island, Farm[] farms) {
 		this.money = money;
 		this.island = island;
 		this.farms = farms;
+		isLoaded = true;
 	}
 }

@@ -2,23 +2,34 @@ package it.tristana.farmingtycoon.config;
 
 import java.io.File;
 
+import org.bukkit.Bukkit;
 import org.bukkit.World;
 
 import it.tristana.commons.config.Settings;
+import it.tristana.commons.helper.CommonsHelper;
 
 public class SettingsIslands extends Settings<ConfigIslands> {
 
 	private World world;
 	private int islandsHeight;
 	private int islandsDistance;
-	
+	private String defaultSchematicName;
+
 	public SettingsIslands(File folder) {
 		super(folder, ConfigIslands.class);
 	}
-	
+
 	@Override
 	protected void reload(ConfigIslands config) {
-		
+		String worldName = config.getString(ConfigIslands.WORLD);
+		world = Bukkit.getWorld(worldName);
+		if (world == null) {
+			throw new IllegalStateException("The world " + worldName + " does not exist or is not loaded!");
+		}
+
+		islandsHeight = CommonsHelper.parseIntOrGetDefault(config.getString(ConfigIslands.ISLANDS_HEIGHT), 64);
+		islandsDistance = CommonsHelper.parseIntOrGetDefault(config.getString(ConfigIslands.ISLANDS_DISTANCE), 500);
+		defaultSchematicName = config.getString(ConfigIslands.DEFAULT_SCHEMATIC_NAME);
 	}
 
 	public World getWorld() {
@@ -31,5 +42,9 @@ public class SettingsIslands extends Settings<ConfigIslands> {
 
 	public int getIslandsDistance() {
 		return islandsDistance;
+	}
+
+	public String getDefaultSchematicName() {
+		return defaultSchematicName;
 	}
 }
