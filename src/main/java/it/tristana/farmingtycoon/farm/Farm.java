@@ -14,6 +14,10 @@ public class Farm implements Tickable {
 	private double cachedIncomePerSecond;
 	private double cachedNextUpgradePrice;
 
+	public Farm(BalanceHolder owner, FarmType farmType) {
+		this(owner, farmType, 0, 0, 0);
+	}
+	
 	public Farm(BalanceHolder owner, FarmType farmType, int amount, int level, double totalIncome) {
 		this.owner = owner;
 		this.farmType = farmType;

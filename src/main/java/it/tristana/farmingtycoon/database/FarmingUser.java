@@ -51,9 +51,17 @@ public class FarmingUser extends BasicUser implements BalanceHolder, Tickable {
 	}
 
 	public synchronized void load(double money, Island island, Farm[] farms) {
+		if (isLoaded) {
+			return;
+		}
+
 		this.money = money;
 		this.island = island;
 		this.farms = farms;
 		isLoaded = true;
+	}
+	
+	public Island getIsland() {
+		return island;
 	}
 }

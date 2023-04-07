@@ -40,7 +40,7 @@ public class IslandsManager {
 		this.previous = new IslandPos(Integer.parseInt(configIslandCounter.getString(ConfigIslandCounter.X)), Integer.parseInt(configIslandCounter.getString(ConfigIslandCounter.Z)));
 	}
 
-	public void generate(FarmingUser user) {
+	public Location generate(FarmingUser user) {
 		Location pos = nextIsland();
 		File file = plugin.getSchematic(settings.getDefaultSchematicName());
 		if (!file.exists()) {
@@ -63,6 +63,8 @@ public class IslandsManager {
 			CommonsHelper.consoleInfo("&cCouldn't paste the worldedit schematic!");
 			plugin.writeThrowableOnErrorsFile(e);
 		}
+
+		return pos;
 	}
 
 	public Location fromIslandPos(IslandPos pos) {

@@ -2,7 +2,9 @@ package it.tristana.farmingtycoon.database;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.stream.Collectors;
 
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 
 import it.tristana.commons.database.DatabaseManager;
@@ -37,7 +39,7 @@ public class FarmingDatabase extends DatabaseManager<FarmingUser> {
 				+ " from %s left join %s on %s.uuid = %s.player_uuid left join %s on %s.uuid = %s.player_uuid"
 				+ " where uuid = '%s'", tablePlayers, tableFarms, tableIslands, tablePlayers, tableIslands, getUuid(user.getPlayer())), resultSet -> {
 					if (!resultSet.isBeforeFirst()) {
-						islandsBroker.generate(user);
+						createUser(user);
 						return;
 					}
 
@@ -59,6 +61,7 @@ public class FarmingDatabase extends DatabaseManager<FarmingUser> {
 		executeUpdate("CREATE TABLE IF NOT EXISTS " + tableIslands + " ("
 				+ "	player_uuid CHAR(36) PRIMARY KEY,"
 				+ "	pos_x INTEGER NOT NULL,"
+				+ " pos_y INTEGER NOT NULL,"
 				+ "	pos_y INTEGER NOT NULL"
 				+ ");");
 		executeUpdate("CREATE TABLE IF NOT EXISTS " + tableFarms + " ("
@@ -75,6 +78,12 @@ public class FarmingDatabase extends DatabaseManager<FarmingUser> {
 				+ "	money DECIMAL(53, 3) UNSIGNED NOT NULL DEFAULT 0"
 				+ ");");
 	}
+	
+	private void createUser(FarmingUser user) {
+		Location pos = islandsBroker.generate(user);
+		Island island = new Island(user, pos.getBlockX(), islandsBroker.getIslandsHeight(), pos.getBlockZ());
+		user.load(0, island, FarmType.asList().stream().map(type -> new Farm(user, type)).collect(Collectors.toList()).toArray(new Farm[0]));
+	}
 
 	private void parseUser(FarmingUser user, ResultSet resultSet) throws SQLException {
 		Farm[] farms = parseFarms(user, resultSet);
@@ -85,8 +94,9 @@ public class FarmingDatabase extends DatabaseManager<FarmingUser> {
 
 	private Island parseIsland(FarmingUser user, ResultSet resultSet) throws SQLException {
 		int posX = resultSet.getInt("pos_x");
+		int posY = resultSet.getInt("pos_y");
 		int posZ = resultSet.getInt("pos_z");
-		return new Island(user, posX, islandsBroker.getIslandsHeight(), posZ);
+		return new Island(user, posX, posY, posZ);
 	}
 
 	private Farm[] parseFarms(FarmingUser user, ResultSet resultSet) throws SQLException {

@@ -1,7 +1,6 @@
 package it.tristana.farmingtycoon;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -19,6 +18,7 @@ import it.tristana.commons.listener.LoginQuitListener;
 import it.tristana.farmingtycoon.command.FarmCommand;
 import it.tristana.farmingtycoon.config.ConfigFarmDatabase;
 import it.tristana.farmingtycoon.config.ConfigIslandCounter;
+import it.tristana.farmingtycoon.config.SettingsCommands;
 import it.tristana.farmingtycoon.config.SettingsFarm;
 import it.tristana.farmingtycoon.config.SettingsIslands;
 import it.tristana.farmingtycoon.database.FarmingDatabase;
@@ -42,6 +42,7 @@ public class Main extends PluginDraft implements Reloadable, DatabaseHolder {
 
 	private IslandsManager islandsManager;
 
+	private SettingsCommands settingsCommands;
 	private SettingsFarm settingsFarm;
 	private SettingsIslands settingsIslands;
 	private ConfigIslandCounter configIslandCounter;
@@ -86,6 +87,14 @@ public class Main extends PluginDraft implements Reloadable, DatabaseHolder {
 	public Database getStorage() {
 		return database;
 	}
+	
+	public UsersManager<FarmingUser> getUsersManager() {
+		return usersManager;
+	}
+	
+	public SettingsCommands getSettingsCommands() {
+		return settingsCommands;
+	}
 
 	public SettingsFarm getSettingsFarm() {
 		return settingsFarm;
@@ -96,7 +105,7 @@ public class Main extends PluginDraft implements Reloadable, DatabaseHolder {
 	}
 	
 	public File getSchematic(String name) {
-		return new File(folder.getAbsolutePath() + File.separator + "schematics", name);
+		return new File(schematicsFolder, name);
 	}
 	
 	private File checkSchematicsFolder() throws IOException {
@@ -110,6 +119,7 @@ public class Main extends PluginDraft implements Reloadable, DatabaseHolder {
 	}
 	
 	private void loadConfigs() {
+		settingsCommands = new SettingsCommands(folder);
 		settingsIslands = new SettingsIslands(folder);
 		configIslandCounter = new ConfigIslandCounter(folder);
 	}

@@ -1,5 +1,9 @@
 package it.tristana.farmingtycoon.farm;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -27,12 +31,14 @@ public enum FarmType {
 	DEAD_BUSH(new FarmBuilder(Material.SAND, Material.DEAD_BUSH), SettingsFarm::getDeadBushBaseIncome, SettingsFarm::getDeadBushBaseUpgradePrice);
 
 	private static final FarmType[] types = values();
+	private static List<FarmType> typesAsList;
 	private static SettingsFarm settings;
 	static {
 		settings = JavaPlugin.getPlugin(Main.class).getSettingsFarm();
 		for (FarmType type : types) {
 			type.builder.setIndex(type.ordinal());
 		}
+		typesAsList = Collections.unmodifiableList(Arrays.asList(types));
 	}
 
 	private FarmBuilder builder;
@@ -43,6 +49,10 @@ public enum FarmType {
 		this.builder = builder;
 		this.baseIncomeSupplier = baseIncomeSupplier;
 		this.baseUpgradePriceSupplier = baseUpgradePriceSupplier;
+	}
+	
+	public static List<FarmType> asList() {
+		return typesAsList;
 	}
 	
 	public static FarmType get(int ordinal) {

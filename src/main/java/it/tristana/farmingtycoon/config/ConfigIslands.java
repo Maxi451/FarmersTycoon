@@ -12,7 +12,7 @@ public class ConfigIslands extends Config {
 	public static final String ISLANDS_HEIGHT = "islands-height";
 	public static final String ISLANDS_DISTANCE = "islands-distance";
 	public static final String DEFAULT_SCHEMATIC_NAME = "default-schematic-name";
-	
+
 	public ConfigIslands(File folder) {
 		super(new File(folder, "islands.yml"));
 	}
