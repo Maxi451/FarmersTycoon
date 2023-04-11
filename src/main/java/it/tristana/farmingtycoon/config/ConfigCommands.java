@@ -6,6 +6,8 @@ import it.tristana.commons.config.Config;
 
 public class ConfigCommands extends Config {
 
+	public static final String FILE_NAME = "commands.yml";
+	
 	private static final String COMMAND = "command.";
 	private static final String HELP = "help";
 	private static final String EXECUTED = "executed";
@@ -16,8 +18,8 @@ public class ConfigCommands extends Config {
 	public static final String COMMAND_GO_EXECUTED = COMMAND_GO + EXECUTED;
 	public static final String COMMAND_GO_HELP = COMMAND_GO + HELP;
 
-	public ConfigCommands(File file) {
-		super(file);
+	public ConfigCommands(File folder) {
+		super(new File(folder, FILE_NAME));
 	}
 
 	@Override

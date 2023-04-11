@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -31,14 +32,14 @@ public enum FarmType {
 	DEAD_BUSH(new FarmBuilder(Material.SAND, Material.DEAD_BUSH), SettingsFarm::getDeadBushBaseIncome, SettingsFarm::getDeadBushBaseUpgradePrice);
 
 	private static final FarmType[] types = values();
-	private static List<FarmType> typesAsList;
-	private static SettingsFarm settings;
+	private static final List<FarmType> typesAsList;
+	private static final SettingsFarm settings;
 	static {
-		settings = JavaPlugin.getPlugin(Main.class).getSettingsFarm();
 		for (FarmType type : types) {
 			type.builder.setIndex(type.ordinal());
 		}
 		typesAsList = Collections.unmodifiableList(Arrays.asList(types));
+		settings = JavaPlugin.getPlugin(Main.class).getSettingsFarm();
 	}
 
 	private FarmBuilder builder;
@@ -63,8 +64,12 @@ public enum FarmType {
 		return types.length;
 	}
 
-	public void build(World world, Island island, int row) {
+	public void build(World world, Location island, int row) {
 		builder.build(world, island, row);
+	}
+	
+	public void update(World world, Location island) {
+		builder.updateSign(world, island);
 	}
 
 	public double getBaseIncome() {

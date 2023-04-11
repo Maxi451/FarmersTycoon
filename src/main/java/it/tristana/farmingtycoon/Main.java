@@ -16,6 +16,7 @@ import it.tristana.commons.interfaces.database.Database;
 import it.tristana.commons.interfaces.database.UsersManager;
 import it.tristana.commons.listener.LoginQuitListener;
 import it.tristana.farmingtycoon.command.FarmCommand;
+import it.tristana.farmingtycoon.config.ConfigCommands;
 import it.tristana.farmingtycoon.config.ConfigFarmDatabase;
 import it.tristana.farmingtycoon.config.ConfigIslandCounter;
 import it.tristana.farmingtycoon.config.SettingsCommands;
@@ -26,15 +27,15 @@ import it.tristana.farmingtycoon.database.FarmingUser;
 import it.tristana.farmingtycoon.farm.IslandsManager;
 
 public class Main extends PluginDraft implements Reloadable, DatabaseHolder {
-	
+
 	public static final String DEFAULT_SCHEMATIC_FILE = "default_farm.schematic";
-	
+
 	private static final long SAVE_TIMEOUT = 60 * 60 * 1000;
-	
+
 	private File folder;
 	private File schematicsFolder;
 	private boolean isDisabled;
-	
+
 	private DatabaseManager<FarmingUser> database;
 	private UsersManager<FarmingUser> usersManager;
 	private Clock autosaveClock;
@@ -65,7 +66,7 @@ public class Main extends PluginDraft implements Reloadable, DatabaseHolder {
 		setupManagers();
 		startClocks();
 		registerListeners();
-		registerCommand(this, FarmCommand.class, "farm", "");
+		registerCommand(this, FarmCommand.class, "farm", ConfigCommands.FILE_NAME);
 	}
 
 	@Override
@@ -73,7 +74,7 @@ public class Main extends PluginDraft implements Reloadable, DatabaseHolder {
 		if (isDisabled) {
 			return;
 		}
-		
+
 		stopClocks();
 		usersManager.saveOnlineUsers();
 	}
@@ -87,11 +88,11 @@ public class Main extends PluginDraft implements Reloadable, DatabaseHolder {
 	public Database getStorage() {
 		return database;
 	}
-	
+
 	public UsersManager<FarmingUser> getUsersManager() {
 		return usersManager;
 	}
-	
+
 	public SettingsCommands getSettingsCommands() {
 		return settingsCommands;
 	}
@@ -103,11 +104,11 @@ public class Main extends PluginDraft implements Reloadable, DatabaseHolder {
 	public IslandsManager getIslandsBroker() {
 		return islandsManager;
 	}
-	
+
 	public File getSchematic(String name) {
 		return new File(schematicsFolder, name);
 	}
-	
+
 	private File checkSchematicsFolder() throws IOException {
 		File schematicsFolder = new File(folder, "schematics");
 		if (schematicsFolder.exists()) {
@@ -117,18 +118,18 @@ public class Main extends PluginDraft implements Reloadable, DatabaseHolder {
 		Files.copy(getResource(DEFAULT_SCHEMATIC_FILE), Path.of(new File(schematicsFolder, DEFAULT_SCHEMATIC_FILE).getAbsolutePath()));
 		return schematicsFolder;
 	}
-	
+
 	private void loadConfigs() {
 		settingsCommands = new SettingsCommands(folder);
 		settingsIslands = new SettingsIslands(folder);
 		configIslandCounter = new ConfigIslandCounter(folder);
 	}
-	
+
 	private void setupManagers() {
 		usersManager = new BasicUsersManager<>(database);
 		islandsManager = new IslandsManager(this, settingsIslands, configIslandCounter);
 	}
-	
+
 	private void registerListeners() {
 		register(new LoginQuitListener<>(usersManager, database, this, (loginEvent, user) -> {
 			usersClock.add(user);
@@ -136,16 +137,16 @@ public class Main extends PluginDraft implements Reloadable, DatabaseHolder {
 			usersClock.remove(user);
 		}));
 	}
-	
+
 	private void startClocks() {
 		autosaveClock = new Clock();
 		autosaveClock.add(() -> usersManager.saveOnlineUsers());
 		autosaveClock.schedule(this, SAVE_TIMEOUT);
-		
+
 		usersClock = new Clock();
 		usersClock.schedule(this, 1000);
 	}
-	
+
 	private void stopClocks() {
 		autosaveClock.cancel();
 		usersClock.cancel();

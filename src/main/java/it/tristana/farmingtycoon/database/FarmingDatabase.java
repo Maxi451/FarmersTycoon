@@ -81,7 +81,7 @@ public class FarmingDatabase extends DatabaseManager<FarmingUser> {
 	
 	private void createUser(FarmingUser user) {
 		Location pos = islandsBroker.generate(user);
-		Island island = new Island(user, pos.getBlockX(), islandsBroker.getIslandsHeight(), pos.getBlockZ());
+		Location island = new Location(user, pos.getBlockX(), islandsBroker.getIslandsHeight(), pos.getBlockZ());
 		user.load(0, island, FarmType.asList().stream().map(type -> new Farm(user, type)).collect(Collectors.toList()).toArray(new Farm[0]));
 	}
 

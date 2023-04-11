@@ -1,11 +1,14 @@
 package it.tristana.farmingtycoon.farm;
 
+import org.bukkit.World;
+
 import it.tristana.commons.interfaces.Tickable;
 import it.tristana.commons.interfaces.shop.BalanceHolder;
+import it.tristana.farmingtycoon.database.FarmingUser;
 
 public class Farm implements Tickable {
 
-	private BalanceHolder owner;
+	private FarmingUser owner;
 	private FarmType farmType;
 	private int amount;
 	private int level;
@@ -14,11 +17,11 @@ public class Farm implements Tickable {
 	private double cachedIncomePerSecond;
 	private double cachedNextUpgradePrice;
 
-	public Farm(BalanceHolder owner, FarmType farmType) {
+	public Farm(FarmingUser owner, FarmType farmType) {
 		this(owner, farmType, 0, 0, 0);
 	}
 	
-	public Farm(BalanceHolder owner, FarmType farmType, int amount, int level, double totalIncome) {
+	public Farm(FarmingUser owner, FarmType farmType, int amount, int level, double totalIncome) {
 		this.owner = owner;
 		this.farmType = farmType;
 		this.amount = amount;
@@ -30,11 +33,16 @@ public class Farm implements Tickable {
 
 	@Override
 	public void runTick() {
+		if (amount == 0) {
+			return;
+		}
+
 		owner.giveMoney(cachedIncomePerSecond);
 		totalIncome += cachedIncomePerSecond;
+		farmType.update(this);
 	}
 
-	public BalanceHolder getOwner() {
+	public FarmingUser getOwner() {
 		return owner;
 	}
 

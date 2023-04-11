@@ -1,5 +1,6 @@
 package it.tristana.farmingtycoon.database;
 
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 
 import it.tristana.commons.database.BasicUser;
@@ -11,7 +12,7 @@ import it.tristana.farmingtycoon.farm.Island;
 public class FarmingUser extends BasicUser implements BalanceHolder, Tickable {
 
 	private volatile double money;
-	private volatile Island island;
+	private volatile Location island;
 	private volatile Farm[] farms;
 
 	private volatile boolean isLoaded;
@@ -50,7 +51,7 @@ public class FarmingUser extends BasicUser implements BalanceHolder, Tickable {
 		return flag;
 	}
 
-	public synchronized void load(double money, Island island, Farm[] farms) {
+	public synchronized void load(double money, Location island, Farm[] farms) {
 		if (isLoaded) {
 			return;
 		}
