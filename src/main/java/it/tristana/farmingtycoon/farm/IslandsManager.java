@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 import org.bukkit.Location;
+import org.bukkit.World;
 
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.EditSessionBuilder;
@@ -83,6 +84,10 @@ public class IslandsManager {
 
 	public int getIslandsHeight() {
 		return settings.getIslandsHeight();
+	}
+	
+	public World getIslandsWorld() {
+		return settings.getWorld();
 	}
 
 	private Location nextIsland() {

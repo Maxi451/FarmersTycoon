@@ -4,9 +4,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import it.tristana.farmingtycoon.Main;
@@ -64,12 +62,12 @@ public enum FarmType {
 		return types.length;
 	}
 
-	public void build(World world, Location island, int row) {
-		builder.build(world, island, row);
+	public void build(Island island, int row) {
+		builder.build(island, row);
 	}
 	
-	public void update(World world, Location island) {
-		builder.updateSign(world, island);
+	public void update(Island island) {
+		builder.updateSign(island);
 	}
 
 	public double getBaseIncome() {

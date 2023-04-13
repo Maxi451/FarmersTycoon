@@ -7,66 +7,82 @@ import it.tristana.commons.helper.CommonsHelper;
 
 public class SettingsFarm extends Settings<ConfigFarm> {
 
+	private String wheatName;
 	private double wheatBaseIncome;
 	private double wheatBaseBuyPrice;
 	private double wheatBaseUpgradePrice;
 
+	private String potatoName;
 	private double potatoBaseIncome;
 	private double potatoBaseBuyPrice;
 	private double potatoBaseUpgradePrice;
 
+	private String carrotName;
 	private double carrotBaseIncome;
 	private double carrotBaseBuyPrice;
 	private double carrotBaseUpgradePrice;
 
+	private String beetrootName;
 	private double beetrootBaseIncome;
 	private double beetrootBaseBuyPrice;
 	private double beetrootBaseUpgradePrice;
 
+	private String sugarCaneName;
 	private double sugarCaneBaseIncome;
 	private double sugarCaneBaseBuyPrice;
 	private double sugarCaneBaseUpgradePrice;
 
+	private String mushroomName;
 	private double mushroomBaseIncome;
 	private double mushroomBaseBuyPrice;
 	private double mushroomBaseUpgradePrice;
 
+	private String cactusName;
 	private double cactusBaseIncome;
 	private double cactusBaseBuyPrice;
 	private double cactusBaseUpgradePrice;
 
+	private String saplingName;
 	private double saplingBaseIncome;
 	private double saplingBaseBuyPrice;
 	private double saplingBaseUpgradePrice;
 
+	private String waterLilyName;
 	private double waterLilyBaseIncome;
 	private double waterLilyBaseBuyPrice;
 	private double waterLilyBaseUpgradePrice;
 
+	private String melonName;
 	private double melonBaseIncome;
 	private double melonBaseBuyPrice;
 	private double melonBaseUpgradePrice;
 
+	private String pumpkinName;
 	private double pumpkinBaseIncome;
 	private double pumpkinBaseBuyPrice;
 	private double pumpkinBaseUpgradePrice;
 
+	private String sweetBerriesName;
 	private double sweetBerriesBaseIncome;
 	private double sweetBerriesBaseBuyPrice;
 	private double sweetBerriesBaseUpgradePrice;
 
+	private String chorusName;
 	private double chorusBaseIncome;
 	private double chorusBaseBuyPrice;
 	private double chorusBaseUpgradePrice;
 
+	private String cocoaName;
 	private double cocoaBaseIncome;
 	private double cocoaBaseBuyPrice;
 	private double cocoaBaseUpgradePrice;
 
+	private String netherWartName;
 	private double netherWartBaseIncome;
 	private double netherWartBaseBuyPrice;
 	private double netherWartBaseUpgradePrice;
 
+	private String deadBushName;
 	private double deadBushBaseIncome;
 	private double deadBushBaseBuyPrice;
 	private double deadBushBaseUpgradePrice;
@@ -77,69 +93,149 @@ public class SettingsFarm extends Settings<ConfigFarm> {
 
 	@Override
 	protected void reload(ConfigFarm config) {
+		wheatName = config.getString(ConfigFarm.WHEAT_NAME);
 		wheatBaseIncome = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.WHEAT_BASE_INCOME), 0.2);
 		wheatBaseBuyPrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.WHEAT_BASE_BUY_PRICE), 25);
 		wheatBaseUpgradePrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.WHEAT_BASE_UPGRADE_PRICE), 0);
 
+		potatoName = config.getString(ConfigFarm.POTATO_NAME);
 		potatoBaseIncome = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.POTATO_BASE_INCOME), 0.2);
 		potatoBaseBuyPrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.POTATO_BASE_BUY_PRICE), 25);
 		potatoBaseUpgradePrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.POTATO_BASE_UPGRADE_PRICE), 0);
 
+		carrotName = config.getString(ConfigFarm.CARROT_NAME);
 		carrotBaseIncome = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.CARROT_BASE_INCOME), 0.2);
 		carrotBaseBuyPrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.CARROT_BASE_BUY_PRICE), 25);
 		carrotBaseUpgradePrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.CARROT_BASE_UPGRADE_PRICE), 0);
 
+		beetrootName = config.getString(ConfigFarm.BEETROOT_NAME);
 		beetrootBaseIncome = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.BEETROOT_BASE_INCOME), 0.2);
 		beetrootBaseBuyPrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.BEETROOT_BASE_BUY_PRICE), 25);
 		beetrootBaseUpgradePrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.BEETROOT_BASE_UPGRADE_PRICE), 0);
 
+		sugarCaneName = config.getString(ConfigFarm.SUGAR_CANE_NAME);
 		sugarCaneBaseIncome = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.SUGAR_CANE_BASE_INCOME), 0.2);
 		sugarCaneBaseBuyPrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.SUGAR_CANE_BASE_BUY_PRICE), 25);
 		sugarCaneBaseUpgradePrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.SUGAR_CANE_BASE_UPGRADE_PRICE), 0);
 
+		mushroomName = config.getString(ConfigFarm.MUSHROOM_NAME);
 		mushroomBaseIncome = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.MUSHROOM_BASE_INCOME), 0.2);
 		mushroomBaseBuyPrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.MUSHROOM_BASE_BUY_PRICE), 25);
 		mushroomBaseUpgradePrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.MUSHROOM_BASE_UPGRADE_PRICE), 0);
 
+		cactusName = config.getString(ConfigFarm.CACTUS_NAME);
 		cactusBaseIncome = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.CACTUS_BASE_INCOME), 0.2);
 		cactusBaseBuyPrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.CACTUS_BASE_BUY_PRICE), 25);
 		cactusBaseUpgradePrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.CACTUS_BASE_UPGRADE_PRICE), 0);
 
+		saplingName = config.getString(ConfigFarm.SAPLING_NAME);
 		saplingBaseIncome = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.SAPLING_BASE_INCOME), 0.2);
 		saplingBaseBuyPrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.SAPLING_BASE_BUY_PRICE), 25);
 		saplingBaseUpgradePrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.SAPLING_BASE_UPGRADE_PRICE), 0);
 
+		waterLilyName = config.getString(ConfigFarm.WATER_LILY_NAME);
 		waterLilyBaseIncome = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.WATER_LILY_BASE_INCOME), 0.2);
 		waterLilyBaseBuyPrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.WATER_LILY_BASE_BUY_PRICE), 25);
 		waterLilyBaseUpgradePrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.WATER_LILY_BASE_UPGRADE_PRICE), 0);
 
+		melonName = config.getString(ConfigFarm.MELON_NAME);
 		melonBaseIncome = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.MELON_BASE_INCOME), 0.2);
 		melonBaseBuyPrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.MELON_BASE_BUY_PRICE), 25);
 		melonBaseUpgradePrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.MELON_BASE_UPGRADE_PRICE), 0);
 
+		pumpkinName = config.getString(ConfigFarm.PUMPKIN_NAME);
 		pumpkinBaseIncome = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.PUMPKIN_BASE_INCOME), 0.2);
 		pumpkinBaseBuyPrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.PUMPKIN_BASE_BUY_PRICE), 25);
 		pumpkinBaseUpgradePrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.PUMPKIN_BASE_UPGRADE_PRICE), 0);
 
+		sweetBerriesName = config.getString(ConfigFarm.SWEET_BERRIES_NAME);
 		sweetBerriesBaseIncome = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.SWEET_BERRIES_BASE_INCOME), 0.2);
 		sweetBerriesBaseBuyPrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.SWEET_BERRIES_BASE_BUY_PRICE), 25);
 		sweetBerriesBaseUpgradePrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.SWEET_BERRIES_BASE_UPGRADE_PRICE), 0);
 
+		chorusName = config.getString(ConfigFarm.CHORUS_NAME);
 		chorusBaseIncome = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.CHORUS_BASE_INCOME), 0.2);
 		chorusBaseBuyPrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.CHORUS_BASE_BUY_PRICE), 25);
 		chorusBaseUpgradePrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.CHORUS_BASE_UPGRADE_PRICE), 0);
 
+		cocoaName = config.getString(ConfigFarm.COCOA_NAME);
 		cocoaBaseIncome = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.COCOA_BASE_INCOME), 0.2);
 		cocoaBaseBuyPrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.COCOA_BASE_BUY_PRICE), 25);
 		cocoaBaseUpgradePrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.COCOA_BASE_UPGRADE_PRICE), 0);
 
+		netherWartName = config.getString(ConfigFarm.NETHER_WART_NAME);
 		netherWartBaseIncome = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.NETHER_WART_BASE_INCOME), 0.2);
 		netherWartBaseBuyPrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.NETHER_WART_BASE_BUY_PRICE), 25);
 		netherWartBaseUpgradePrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.NETHER_WART_BASE_UPGRADE_PRICE), 0);
 
+		deadBushName = config.getString(ConfigFarm.DEAD_BUSH_NAME);
 		deadBushBaseIncome = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.DEAD_BUSH_BASE_INCOME), 0.2);
 		deadBushBaseBuyPrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.DEAD_BUSH_BASE_BUY_PRICE), 25);
 		deadBushBaseUpgradePrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.DEAD_BUSH_BASE_UPGRADE_PRICE), 0);
+	}
+
+	public String getWheatName() {
+		return wheatName;
+	}
+
+	public String getPotatoName() {
+		return potatoName;
+	}
+
+	public String getCarrotName() {
+		return carrotName;
+	}
+
+	public String getBeetrootName() {
+		return beetrootName;
+	}
+
+	public String getSugarCaneName() {
+		return sugarCaneName;
+	}
+
+	public String getMushroomName() {
+		return mushroomName;
+	}
+
+	public String getCactusName() {
+		return cactusName;
+	}
+
+	public String getSaplingName() {
+		return saplingName;
+	}
+
+	public String getWaterLilyName() {
+		return waterLilyName;
+	}
+
+	public String getMelonName() {
+		return melonName;
+	}
+
+	public String getPumpkinName() {
+		return pumpkinName;
+	}
+
+	public String getSweetBerriesName() {
+		return sweetBerriesName;
+	}
+
+	public String getChorusName() {
+		return chorusName;
+	}
+
+	public String getCocoaName() {
+		return cocoaName;
+	}
+
+	public String getNetherWartName() {
+		return netherWartName;
+	}
+
+	public String getDeadBushName() {
+		return deadBushName;
 	}
 
 	public double getWheatBaseIncome() {

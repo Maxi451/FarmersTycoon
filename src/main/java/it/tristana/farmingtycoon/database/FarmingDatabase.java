@@ -81,7 +81,7 @@ public class FarmingDatabase extends DatabaseManager<FarmingUser> {
 	
 	private void createUser(FarmingUser user) {
 		Location pos = islandsBroker.generate(user);
-		Location island = new Location(user, pos.getBlockX(), islandsBroker.getIslandsHeight(), pos.getBlockZ());
+		Island island = new Island(user, islandsBroker.getIslandsWorld(), pos.getBlockX(), islandsBroker.getIslandsHeight(), pos.getBlockZ());
 		user.load(0, island, FarmType.asList().stream().map(type -> new Farm(user, type)).collect(Collectors.toList()).toArray(new Farm[0]));
 	}
 
@@ -96,7 +96,7 @@ public class FarmingDatabase extends DatabaseManager<FarmingUser> {
 		int posX = resultSet.getInt("pos_x");
 		int posY = resultSet.getInt("pos_y");
 		int posZ = resultSet.getInt("pos_z");
-		return new Island(user, posX, posY, posZ);
+		return new Island(user, islandsBroker.getIslandsWorld(), posX, posY, posZ);
 	}
 
 	private Farm[] parseFarms(FarmingUser user, ResultSet resultSet) throws SQLException {

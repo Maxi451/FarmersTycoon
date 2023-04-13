@@ -1,9 +1,6 @@
 package it.tristana.farmingtycoon.farm;
 
-import org.bukkit.World;
-
 import it.tristana.commons.interfaces.Tickable;
-import it.tristana.commons.interfaces.shop.BalanceHolder;
 import it.tristana.farmingtycoon.database.FarmingUser;
 
 public class Farm implements Tickable {
@@ -39,7 +36,7 @@ public class Farm implements Tickable {
 
 		owner.giveMoney(cachedIncomePerSecond);
 		totalIncome += cachedIncomePerSecond;
-		farmType.update(this);
+		farmType.update(owner.getIsland());
 	}
 
 	public FarmingUser getOwner() {

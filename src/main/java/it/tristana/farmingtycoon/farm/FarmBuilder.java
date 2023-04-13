@@ -37,19 +37,24 @@ sealed class FarmBuilder permits CactusBuilder, DirectionalFarmBuilder, Mushroom
 		this.crop = crop;
 	}
 
-	final void build(World world, Island island, int row) {
+	final void build(Island island, int row) {
+		World world = island.world();
 		int x = getFarmfieldX(island);
 		int y = getFarmfieldY(island);
 		int z = getFarmfieldZ(island) + row;
 		if (row == 0) {
-			updateSign(world, island);
+			updateSign(island);
 			placeTerrain(world, x, y, z, WIDTH, LENGTH);
 		}
 		build(world, x, y + 1, z, row, WIDTH);
 	}
 	
-	final void updateSign(World world, Island island) {
-		Block block = getSignLocation(world, island).getBlock();
+	final void updateSign(Island island) {
+		updateSign(island, 0, 0);
+	}
+	
+	final void updateSign(Island island, double incomePerSecond, double totalMoney) {
+		Block block = getSignLocation(island).getBlock();
 		if (block.getType() != Material.OAK_WALL_SIGN) {
 			block.setType(Material.OAK_WALL_SIGN, false);
 		}
@@ -60,8 +65,8 @@ sealed class FarmBuilder permits CactusBuilder, DirectionalFarmBuilder, Mushroom
 		Sign sign = (Sign) block.getState();
 	}
 
-	final Location getSignLocation(World world, Island island) {
-		return new Location(world, getFarmfieldX(island) - 2, getFarmfieldY(island) + 1, getFarmfieldZ(island) - 2);
+	final Location getSignLocation(Island island) {
+		return new Location(island.world(), getFarmfieldX(island) - 2, getFarmfieldY(island) + 1, getFarmfieldZ(island) - 2);
 	}
 
 	final void setIndex(int idx) {
