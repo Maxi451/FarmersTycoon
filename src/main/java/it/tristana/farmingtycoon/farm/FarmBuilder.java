@@ -12,8 +12,21 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.type.Farmland;
 import org.bukkit.block.data.type.WallSign;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import it.tristana.commons.helper.CommonsHelper;
+import it.tristana.farmingtycoon.Main;
 
 sealed class FarmBuilder permits CactusBuilder, DirectionalFarmBuilder, MushroomBuilder, SugarCaneBuilder {
+
+	private static final Main plugin = JavaPlugin.getPlugin(Main.class);
+
+	private static final String[] farmSignKeywords = new String[] {
+			"{name}",
+			"{level}",
+			"{mps}",
+			"{total}"	
+	};
 
 	private static final int X_OFFSET = 10;
 	private static final int Y_OFFSET = 3;
@@ -21,13 +34,13 @@ sealed class FarmBuilder permits CactusBuilder, DirectionalFarmBuilder, Mushroom
 
 	private static final int WIDTH = 5;
 	private static final int LENGTH = 150;
-	
+
 	private static final BlockFace SIGN_ROTATION = BlockFace.NORTH;
 
 	protected Material terrain;
 	protected Material crop;
 	private int idx;
-	
+
 	FarmBuilder() {
 		this(Material.STONE, Material.STONE);
 	}
@@ -48,11 +61,11 @@ sealed class FarmBuilder permits CactusBuilder, DirectionalFarmBuilder, Mushroom
 		}
 		build(world, x, y + 1, z, row, WIDTH);
 	}
-	
+
 	final void updateSign(Island island) {
 		updateSign(island, 0, 0);
 	}
-	
+
 	final void updateSign(Island island, double incomePerSecond, double totalMoney) {
 		Block block = getSignLocation(island).getBlock();
 		if (block.getType() != Material.OAK_WALL_SIGN) {
@@ -63,6 +76,11 @@ sealed class FarmBuilder permits CactusBuilder, DirectionalFarmBuilder, Mushroom
 		data.setFacing(SIGN_ROTATION);
 		block.setBlockData(data, false);
 		Sign sign = (Sign) block.getState();
+		String[] lines = plugin.getSettingsIslands().getFarmSignLines();
+		String[] replacements = new String[] {  };
+		for (int i = 0; i < lines.length; i ++) {
+			lines[i] = CommonsHelper.replaceAll(lines[i], farmSignKeywords, replacements);
+		}
 	}
 
 	final Location getSignLocation(Island island) {

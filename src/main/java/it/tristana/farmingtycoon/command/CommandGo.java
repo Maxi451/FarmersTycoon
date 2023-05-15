@@ -1,6 +1,7 @@
 package it.tristana.farmingtycoon.command;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class CommandGo extends FarmSubCommand {
 
@@ -10,7 +11,8 @@ public class CommandGo extends FarmSubCommand {
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {
-		
+		Player player = (Player) sender;
+		player.teleport(usersManager.getUser(player).getIsland().toLocation());
 	}
 	
 	@Override

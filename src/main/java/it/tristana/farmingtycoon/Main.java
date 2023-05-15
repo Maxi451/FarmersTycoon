@@ -100,6 +100,10 @@ public class Main extends PluginDraft implements Reloadable, DatabaseHolder {
 	public SettingsFarm getSettingsFarm() {
 		return settingsFarm;
 	}
+	
+	public SettingsIslands getSettingsIslands() {
+		return settingsIslands;
+	}
 
 	public IslandsManager getIslandsBroker() {
 		return islandsManager;
