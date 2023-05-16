@@ -1,38 +1,24 @@
 package it.tristana.farmingtycoon.helper;
 
+import org.bukkit.plugin.java.JavaPlugin;
+
+import it.tristana.farmingtycoon.Main;
+import it.tristana.farmingtycoon.config.SettingsMessages;
+
 public class NumberFormat {
 
-	private static final double LOG_1000 = Math.log(1000);
-	
-	private static final String[] words = {
-			"",
-			"Thousand",
-			"Million",
-			"Billion",
-			"Trillion",
-			"Quadrillion",
-			"Quintillion",
-			"Sextillion",
-			"Septillion",
-			"Octillion",
-			"Nonillion",
-			"Decillion",
-			"Undecillion",
-			"Duodecillion",
-			"Tredecillion",
-			"Quattuordecillion",
-			"Quindecillion",
-			"Sexdecillion",
-			"Septendecillion",
-			"Octodecillion",
-			"Novemdecillion",
-			"Vigintillion"
-	};
+	private static final SettingsMessages settings = JavaPlugin.getPlugin(Main.class).getSettingsMessages();
+
+	private static final int MAX_DIGITS = 3;
+	private static final int BASE = 10;
+	private static final double POWER_DIGITS = Math.pow(BASE, MAX_DIGITS);
+	private static final double LOG = Math.log(POWER_DIGITS);
+	private static final double BASE_LOG = Math.log(BASE);
 
 	private NumberFormat() {}
 
 	public static String format(double num) {
-		if (num < 1000 && num > -1000) {
+		if (num < POWER_DIGITS && num > -POWER_DIGITS) {
 			return Integer.toString((int) num);
 		}
 
@@ -42,10 +28,12 @@ public class NumberFormat {
 			isNegative = true;
 		}
 
-		int index = (int) (Math.log(num) / LOG_1000);
-		int digits = (int) Math.log10(num) + 1;
-		int afterComma = (3 - digits % 3) % 3;
-		int piece = (int) (num / Math.pow(10, digits - 3));
-		return (isNegative ? "-" : "") + String.format("%." + afterComma + "f", piece / Math.pow(10, afterComma)) + " " + (index < words.length ? words[index] : "e" + index * 3);
+		double log = Math.log(num);
+		int index = (int) (log / LOG);
+		int digits = (int) (log / BASE_LOG) + 1;
+		int afterComma = (MAX_DIGITS - digits % MAX_DIGITS) % MAX_DIGITS;
+		int piece = (int) (num / Math.pow(BASE, digits - MAX_DIGITS));
+		String[] words = settings.getUnits();
+		return (isNegative ? "-" : "") + String.format("%." + afterComma + "f", piece / Math.pow(BASE, afterComma)) + " " + (index < words.length ? words[index] : "e" + index * MAX_DIGITS);
 	}
 }

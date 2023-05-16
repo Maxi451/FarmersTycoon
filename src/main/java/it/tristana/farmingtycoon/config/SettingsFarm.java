@@ -7,6 +7,9 @@ import it.tristana.commons.helper.CommonsHelper;
 
 public class SettingsFarm extends Settings<ConfigFarm> {
 
+	private double upgradePriceMultiplier;
+	private double incomeLevelMultiplier;
+	
 	private String wheatName;
 	private double wheatBaseIncome;
 	private double wheatBaseBuyPrice;
@@ -93,6 +96,9 @@ public class SettingsFarm extends Settings<ConfigFarm> {
 
 	@Override
 	protected void reload(ConfigFarm config) {
+		upgradePriceMultiplier = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.UPGRADE_PRICE_MULTIPLIER), 1.4);
+		incomeLevelMultiplier = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.INCOME_LEVEL_MULTIPLIER), 2);
+		
 		wheatName = config.getString(ConfigFarm.WHEAT_NAME);
 		wheatBaseIncome = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.WHEAT_BASE_INCOME), 0.2);
 		wheatBaseBuyPrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.WHEAT_BASE_BUY_PRICE), 25);
@@ -172,6 +178,14 @@ public class SettingsFarm extends Settings<ConfigFarm> {
 		deadBushBaseIncome = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.DEAD_BUSH_BASE_INCOME), 0.2);
 		deadBushBaseBuyPrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.DEAD_BUSH_BASE_BUY_PRICE), 25);
 		deadBushBaseUpgradePrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.DEAD_BUSH_BASE_UPGRADE_PRICE), 0);
+	}
+
+	public double getUpgradePriceMultiplier() {
+		return upgradePriceMultiplier;
+	}
+
+	public double getIncomeLevelMultiplier() {
+		return incomeLevelMultiplier;
 	}
 
 	public String getWheatName() {

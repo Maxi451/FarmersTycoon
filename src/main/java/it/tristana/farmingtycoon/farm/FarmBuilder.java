@@ -17,6 +17,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import it.tristana.commons.helper.CommonsHelper;
 import it.tristana.farmingtycoon.Main;
 
+import static java.lang.String.valueOf;
+
 sealed class FarmBuilder permits CactusBuilder, DirectionalFarmBuilder, MushroomBuilder, SugarCaneBuilder {
 
 	private static final Main plugin = JavaPlugin.getPlugin(Main.class);
@@ -39,7 +41,7 @@ sealed class FarmBuilder permits CactusBuilder, DirectionalFarmBuilder, Mushroom
 
 	protected Material terrain;
 	protected Material crop;
-	private int idx;
+	private FarmType type;
 
 	FarmBuilder() {
 		this(Material.STONE, Material.STONE);
@@ -63,10 +65,10 @@ sealed class FarmBuilder permits CactusBuilder, DirectionalFarmBuilder, Mushroom
 	}
 
 	final void updateSign(Island island) {
-		updateSign(island, 0, 0);
+		updateSign(island, 0, 0, 0);
 	}
 
-	final void updateSign(Island island, double incomePerSecond, double totalMoney) {
+	final void updateSign(Island island, int level, double incomePerSecond, double totalMoney) {
 		Block block = getSignLocation(island).getBlock();
 		if (block.getType() != Material.OAK_WALL_SIGN) {
 			block.setType(Material.OAK_WALL_SIGN, false);
@@ -76,19 +78,21 @@ sealed class FarmBuilder permits CactusBuilder, DirectionalFarmBuilder, Mushroom
 		data.setFacing(SIGN_ROTATION);
 		block.setBlockData(data, false);
 		Sign sign = (Sign) block.getState();
+		sign.setGlowingText(true);
 		String[] lines = plugin.getSettingsIslands().getFarmSignLines();
-		String[] replacements = new String[] {  };
+		String[] replacements = new String[] { type.getName(), valueOf(level), valueOf(incomePerSecond), valueOf(totalMoney) };
 		for (int i = 0; i < lines.length; i ++) {
-			lines[i] = CommonsHelper.replaceAll(lines[i], farmSignKeywords, replacements);
+			sign.setLine(i, CommonsHelper.replaceAll(lines[i], farmSignKeywords, replacements));
 		}
+		sign.update(false, false);
 	}
 
 	final Location getSignLocation(Island island) {
 		return new Location(island.world(), getFarmfieldX(island) - 2, getFarmfieldY(island) + 1, getFarmfieldZ(island) - 2);
 	}
 
-	final void setIndex(int idx) {
-		this.idx = idx;
+	final void setType(FarmType type) {
+		this.type = type;
 	}
 
 	final void placeTerrain(World world, int x, int y, int z, int width, int length) {
@@ -159,7 +163,7 @@ sealed class FarmBuilder permits CactusBuilder, DirectionalFarmBuilder, Mushroom
 	void updateDirection(Block block, Directional directional) {}
 
 	private final int getFarmfieldX(Island island) {
-		return island.posX() + X_OFFSET + WIDTH * idx;
+		return island.posX() + X_OFFSET + WIDTH * type.ordinal();
 	}
 
 	private final int getFarmfieldY(Island island) {

@@ -1,10 +1,16 @@
 package it.tristana.farmingtycoon.farm;
 
+import org.bukkit.plugin.java.JavaPlugin;
+
 import it.tristana.commons.interfaces.Tickable;
+import it.tristana.farmingtycoon.Main;
+import it.tristana.farmingtycoon.config.SettingsFarm;
 import it.tristana.farmingtycoon.database.FarmingUser;
 
 public class Farm implements Tickable {
 
+	private static final SettingsFarm settings = JavaPlugin.getPlugin(Main.class).getSettingsFarm();
+	
 	private FarmingUser owner;
 	private FarmType farmType;
 	private int amount;
@@ -79,10 +85,10 @@ public class Farm implements Tickable {
 	}
 
 	private void recalcNextUpgradePrice() {
-		cachedNextUpgradePrice = farmType.getBaseUpgradePrice() * Math.pow(1.4, amount);
+		cachedNextUpgradePrice = farmType.getBaseUpgradePrice() * Math.pow(settings.getUpgradePriceMultiplier(), amount);
 	}
 
 	private void recalcMoneyPerSecond() {
-		cachedIncomePerSecond = farmType.getBaseIncome() * amount * Math.pow(2, level);
+		cachedIncomePerSecond = farmType.getBaseIncome() * amount * Math.pow(settings.getIncomeLevelMultiplier(), level);
 	}
 }

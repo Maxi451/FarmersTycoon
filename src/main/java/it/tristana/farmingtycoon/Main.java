@@ -7,12 +7,11 @@ import java.nio.file.Path;
 
 import it.tristana.commons.arena.Clock;
 import it.tristana.commons.database.BasicUsersManager;
-import it.tristana.commons.database.DatabaseManager;
 import it.tristana.commons.helper.CommonsHelper;
 import it.tristana.commons.helper.PluginDraft;
 import it.tristana.commons.interfaces.DatabaseHolder;
 import it.tristana.commons.interfaces.Reloadable;
-import it.tristana.commons.interfaces.database.Database;
+import it.tristana.commons.interfaces.database.UserRetriever;
 import it.tristana.commons.interfaces.database.UsersManager;
 import it.tristana.commons.listener.LoginQuitListener;
 import it.tristana.farmingtycoon.command.FarmCommand;
@@ -22,6 +21,7 @@ import it.tristana.farmingtycoon.config.ConfigIslandCounter;
 import it.tristana.farmingtycoon.config.SettingsCommands;
 import it.tristana.farmingtycoon.config.SettingsFarm;
 import it.tristana.farmingtycoon.config.SettingsIslands;
+import it.tristana.farmingtycoon.config.SettingsMessages;
 import it.tristana.farmingtycoon.database.FarmingDatabase;
 import it.tristana.farmingtycoon.database.FarmingUser;
 import it.tristana.farmingtycoon.farm.IslandsManager;
@@ -36,13 +36,14 @@ public class Main extends PluginDraft implements Reloadable, DatabaseHolder {
 	private File schematicsFolder;
 	private boolean isDisabled;
 
-	private DatabaseManager<FarmingUser> database;
+	private FarmingDatabase database;
 	private UsersManager<FarmingUser> usersManager;
 	private Clock autosaveClock;
 	private Clock usersClock;
 
 	private IslandsManager islandsManager;
 
+	private SettingsMessages settingsMessages;
 	private SettingsCommands settingsCommands;
 	private SettingsFarm settingsFarm;
 	private SettingsIslands settingsIslands;
@@ -81,16 +82,23 @@ public class Main extends PluginDraft implements Reloadable, DatabaseHolder {
 
 	@Override
 	public void reload() {
+		settingsMessages.reload();
+		settingsCommands.reload();
+		settingsFarm.reload();
 		settingsIslands.reload();
 	}
 
 	@Override
-	public Database getStorage() {
+	public FarmingDatabase getStorage() {
 		return database;
 	}
 
 	public UsersManager<FarmingUser> getUsersManager() {
 		return usersManager;
+	}
+	
+	public SettingsMessages getSettingsMessages() {
+		return settingsMessages;
 	}
 
 	public SettingsCommands getSettingsCommands() {
@@ -124,8 +132,10 @@ public class Main extends PluginDraft implements Reloadable, DatabaseHolder {
 	}
 
 	private void loadConfigs() {
+		settingsMessages = new SettingsMessages(folder);
 		settingsCommands = new SettingsCommands(folder);
 		settingsIslands = new SettingsIslands(folder);
+		settingsFarm = new SettingsFarm(folder);
 		configIslandCounter = new ConfigIslandCounter(folder);
 	}
 

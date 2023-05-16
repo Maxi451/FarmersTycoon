@@ -79,6 +79,10 @@ public class FarmingDatabase extends DatabaseManager<FarmingUser> {
 				+ ");");
 	}
 	
+	public boolean doesUserExist(OfflinePlayer player) {
+		
+	}
+	
 	private void createUser(FarmingUser user) {
 		Location pos = islandsBroker.generate(user);
 		Island island = new Island(user, islandsBroker.getIslandsWorld(), pos.getBlockX(), islandsBroker.getIslandsHeight(), pos.getBlockZ());

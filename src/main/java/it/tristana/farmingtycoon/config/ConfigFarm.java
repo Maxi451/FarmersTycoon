@@ -6,6 +6,9 @@ import it.tristana.commons.config.Config;
 
 public class ConfigFarm extends Config {
 
+	public static final String UPGRADE_PRICE_MULTIPLIER = "upgrade-price-multiplier";
+	public static final String INCOME_LEVEL_MULTIPLIER = "income-level-multiplier";
+	
 	private static final String NAME = "name";
 	private static final String BASE_INCOME = "base-income";
 	private static final String BASE_BUY_PRICE = "base-buy-price";
@@ -113,6 +116,9 @@ public class ConfigFarm extends Config {
 
 	@Override
 	protected void createDefault() {
+		set(UPGRADE_PRICE_MULTIPLIER, "1.4");
+		set(INCOME_LEVEL_MULTIPLIER, "2");
+		
 		set(WHEAT_NAME, "Wheat");
 		set(WHEAT_BASE_INCOME, "0.1");
 		set(WHEAT_BASE_BUY_PRICE, "25");
