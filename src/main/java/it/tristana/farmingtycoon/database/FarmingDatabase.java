@@ -34,26 +34,53 @@ public class FarmingDatabase extends DatabaseManager<FarmingUser> {
 
 	@Override
 	public FarmingUser getUser(OfflinePlayer player) {
-		FarmingUser user = new FarmingUser(player);
+		return getUser(player, true);
+	}
+
+	public FarmingUser getUser(OfflinePlayer player, boolean createIfMissing) {
+		FarmingUser[] user = new FarmingUser[] { new FarmingUser(player) }; // Ugly hack to pass by reference
+		String uuid = getUuid(player);
+
 		executeQueryAsync(String.format("SELECT money, amount, farm_type, level, total_income, pos_x, pos_y"
 				+ " from %s left join %s on %s.uuid = %s.player_uuid left join %s on %s.uuid = %s.player_uuid"
-				+ " where uuid = '%s'", tablePlayers, tableFarms, tableIslands, tablePlayers, tableIslands, getUuid(user.getPlayer())), resultSet -> {
+				+ " where uuid = '%s'", tablePlayers, tableFarms, tableIslands, tablePlayers, tableIslands, uuid), resultSet -> {
+
 					if (!resultSet.isBeforeFirst()) {
-						createUser(user);
+						if (createIfMissing) {
+							createUser(user[0]);
+						} else {
+							user[0] = null;
+						}
 						return;
 					}
 
-					parseUser(user, resultSet);
+					parseUser(user[0], resultSet);
 				}, error -> {
-					CommonsHelper.consoleInfo("&cError while loading " + player.getName() + " (" + player.getUniqueId() + ")'s data!");
+					CommonsHelper.consoleInfo("&cError while loading " + player.getName() + " (" + uuid + ")'s data!");
 					plugin.writeThrowableOnErrorsFile(error);
 				});
-		return user;
+		return user[0];
 	}
 
 	@Override
 	public void saveUser(FarmingUser user) {
-
+		OfflinePlayer player = user.getPlayer();
+		String uuid = getUuid(player);
+		new Thread(() -> {
+			try {
+				executeUpdate(String.format("REPLACE INTO %s (uuid, money) VALUES ('%s', %.3f);",
+						tablePlayers, uuid, user.getMoney()));
+				for (Farm farm : user.getFarms()) {
+					executeUpdate(String.format("REPLACE INTO %s (player_uuid, farm_type, amount, level, total_income) VALUES ('%s', %d, %d, %d, %.3f);",
+							tableFarms, uuid, farm.getFarmType().ordinal(), farm.getAmount(), farm.getLevel(), farm.getTotalIncome()));
+				}
+				Island island = user.getIsland();
+				executeUpdate(String.format("REPLACE INTO %s (uuid, pos_x, pos_y, pos_z) VALUES ('%s', %d, %d, %d);",
+						tableIslands, uuid, island.posX(), island.posY(), island.posZ()));
+			} catch (SQLException e) {
+				CommonsHelper.consoleInfo("&cError while saving " + player.getName() + " (" + uuid + ")'s data!");
+			}
+		}).start();
 	}
 
 	@Override
@@ -62,7 +89,7 @@ public class FarmingDatabase extends DatabaseManager<FarmingUser> {
 				+ "	player_uuid CHAR(36) PRIMARY KEY,"
 				+ "	pos_x INTEGER NOT NULL,"
 				+ " pos_y INTEGER NOT NULL,"
-				+ "	pos_y INTEGER NOT NULL"
+				+ "	pos_z INTEGER NOT NULL"
 				+ ");");
 		executeUpdate("CREATE TABLE IF NOT EXISTS " + tableFarms + " ("
 				+ " player_uuid CHAR(36),"
@@ -78,11 +105,7 @@ public class FarmingDatabase extends DatabaseManager<FarmingUser> {
 				+ "	money DECIMAL(53, 3) UNSIGNED NOT NULL DEFAULT 0"
 				+ ");");
 	}
-	
-	public boolean doesUserExist(OfflinePlayer player) {
-		
-	}
-	
+
 	private void createUser(FarmingUser user) {
 		Location pos = islandsBroker.generate(user);
 		Island island = new Island(user, islandsBroker.getIslandsWorld(), pos.getBlockX(), islandsBroker.getIslandsHeight(), pos.getBlockZ());

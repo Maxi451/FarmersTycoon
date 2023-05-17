@@ -14,7 +14,6 @@ public class CommandGo extends FarmSubCommand {
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public void execute(CommandSender sender, String[] args) {
 		Player player = (Player) sender;
 		if (args.length < 2 || !main.isAdmin(player)) {
@@ -29,8 +28,13 @@ public class CommandGo extends FarmSubCommand {
 		}
 		
 		new Thread(() -> {
+			@SuppressWarnings("deprecation")
 			OfflinePlayer offline = Bukkit.getOfflinePlayer(args[1]);
-			main.getPlugin().get.getUniqueId()
+			FarmingUser user = main.getPlugin().getStorage().getUser(offline, false);
+			if (user == null) {
+				
+			}
+			teleportToIslandOf(player, user);
 		}).start();
 	}
 	
@@ -41,7 +45,7 @@ public class CommandGo extends FarmSubCommand {
 
 	@Override
 	protected String getHelp() {
-		return settingsCommands.getCommandGoHelp();
+		return settingsMessages.getCommandGoHelp();
 	}
 	
 	private void teleportToIslandOf(Player player, FarmingUser user) {

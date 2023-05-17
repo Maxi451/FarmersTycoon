@@ -64,4 +64,8 @@ public class FarmingUser extends BasicUser implements BalanceHolder, Tickable {
 	public Island getIsland() {
 		return island;
 	}
+	
+	Farm[] getFarms() {
+		return farms;
+	}
 }

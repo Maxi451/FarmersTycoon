@@ -11,14 +11,12 @@ import it.tristana.commons.helper.CommonsHelper;
 import it.tristana.commons.helper.PluginDraft;
 import it.tristana.commons.interfaces.DatabaseHolder;
 import it.tristana.commons.interfaces.Reloadable;
-import it.tristana.commons.interfaces.database.UserRetriever;
 import it.tristana.commons.interfaces.database.UsersManager;
 import it.tristana.commons.listener.LoginQuitListener;
 import it.tristana.farmingtycoon.command.FarmCommand;
-import it.tristana.farmingtycoon.config.ConfigCommands;
 import it.tristana.farmingtycoon.config.ConfigFarmDatabase;
 import it.tristana.farmingtycoon.config.ConfigIslandCounter;
-import it.tristana.farmingtycoon.config.SettingsCommands;
+import it.tristana.farmingtycoon.config.ConfigMessages;
 import it.tristana.farmingtycoon.config.SettingsFarm;
 import it.tristana.farmingtycoon.config.SettingsIslands;
 import it.tristana.farmingtycoon.config.SettingsMessages;
@@ -44,7 +42,6 @@ public class Main extends PluginDraft implements Reloadable, DatabaseHolder {
 	private IslandsManager islandsManager;
 
 	private SettingsMessages settingsMessages;
-	private SettingsCommands settingsCommands;
 	private SettingsFarm settingsFarm;
 	private SettingsIslands settingsIslands;
 	private ConfigIslandCounter configIslandCounter;
@@ -67,7 +64,7 @@ public class Main extends PluginDraft implements Reloadable, DatabaseHolder {
 		setupManagers();
 		startClocks();
 		registerListeners();
-		registerCommand(this, FarmCommand.class, "farm", ConfigCommands.FILE_NAME);
+		registerCommand(this, FarmCommand.class, "farm", ConfigMessages.FILE_NAME);
 	}
 
 	@Override
@@ -83,7 +80,6 @@ public class Main extends PluginDraft implements Reloadable, DatabaseHolder {
 	@Override
 	public void reload() {
 		settingsMessages.reload();
-		settingsCommands.reload();
 		settingsFarm.reload();
 		settingsIslands.reload();
 	}
@@ -99,10 +95,6 @@ public class Main extends PluginDraft implements Reloadable, DatabaseHolder {
 	
 	public SettingsMessages getSettingsMessages() {
 		return settingsMessages;
-	}
-
-	public SettingsCommands getSettingsCommands() {
-		return settingsCommands;
 	}
 
 	public SettingsFarm getSettingsFarm() {
@@ -133,7 +125,6 @@ public class Main extends PluginDraft implements Reloadable, DatabaseHolder {
 
 	private void loadConfigs() {
 		settingsMessages = new SettingsMessages(folder);
-		settingsCommands = new SettingsCommands(folder);
 		settingsIslands = new SettingsIslands(folder);
 		settingsFarm = new SettingsFarm(folder);
 		configIslandCounter = new ConfigIslandCounter(folder);
