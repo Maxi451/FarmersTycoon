@@ -18,7 +18,8 @@ public class ConfigScoreboard extends Config {
 	protected void createDefault() {
 		set(SCOREBOARD_NAME, "&6&lFarmers Tycoon");
 		set(SCOREBOARD_LINES, Arrays.asList(
-				""
+				"Player: %ft_player%",
+				"Balance: %ft_money%"
 				));
 	}
 }

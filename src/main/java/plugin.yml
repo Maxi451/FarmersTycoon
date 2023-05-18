@@ -4,4 +4,4 @@ main: it.tristana.farming.Main
 description: Tycoon with Minecraft crops
 author: Massimiliano Micol
 depend: [TristanaCommons, WorldEdit]
-softdepend: [FastAsyncWorldEdit]
+softdepend: [FastAsyncWorldEdit, PlaceholderAPI]

@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import org.bukkit.Bukkit;
+
 import it.tristana.commons.arena.Clock;
 import it.tristana.commons.database.BasicUsersManager;
 import it.tristana.commons.helper.CommonsHelper;
@@ -23,6 +25,7 @@ import it.tristana.farmingtycoon.config.SettingsMessages;
 import it.tristana.farmingtycoon.database.FarmingDatabase;
 import it.tristana.farmingtycoon.database.FarmingUser;
 import it.tristana.farmingtycoon.farm.IslandsManager;
+import it.tristana.farmingtycoon.helper.FarmingPapiHook;
 
 public class Main extends PluginDraft implements Reloadable, DatabaseHolder {
 
@@ -32,6 +35,7 @@ public class Main extends PluginDraft implements Reloadable, DatabaseHolder {
 
 	private File folder;
 	private File schematicsFolder;
+	private boolean isPapiEnabled;
 	private boolean isDisabled;
 
 	private FarmingDatabase database;
@@ -64,6 +68,10 @@ public class Main extends PluginDraft implements Reloadable, DatabaseHolder {
 		setupManagers();
 		startClocks();
 		registerListeners();
+		isPapiEnabled = Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null;
+		if (isPapiEnabled) {
+			new FarmingPapiHook(this, usersManager);
+		}
 		registerCommand(this, FarmCommand.class, "farm", ConfigMessages.FILE_NAME);
 	}
 
@@ -111,6 +119,10 @@ public class Main extends PluginDraft implements Reloadable, DatabaseHolder {
 
 	public File getSchematic(String name) {
 		return new File(schematicsFolder, name);
+	}
+	
+	public boolean isPapiEnabled() {
+		return isPapiEnabled;
 	}
 
 	private File checkSchematicsFolder() throws IOException {
