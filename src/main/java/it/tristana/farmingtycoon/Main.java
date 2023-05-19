@@ -144,7 +144,7 @@ public class Main extends PluginDraft implements Reloadable, DatabaseHolder {
 
 	private void setupManagers() {
 		usersManager = new BasicUsersManager<>(database);
-		islandsManager = new IslandsManager(this, settingsIslands, configIslandCounter);
+		islandsManager = new IslandsManager(this, usersManager, settingsIslands, configIslandCounter);
 	}
 
 	private void registerListeners() {

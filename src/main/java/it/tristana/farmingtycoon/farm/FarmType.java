@@ -40,10 +40,10 @@ public enum FarmType {
 		settings = JavaPlugin.getPlugin(Main.class).getSettingsFarm();
 	}
 
-	private FarmBuilder builder;
-	private SettingsObjectRetriever<String> nameSupplier;
-	private SettingsDoubleRetriever baseIncomeSupplier;
-	private SettingsDoubleRetriever baseUpgradePriceSupplier;
+	private final FarmBuilder builder;
+	private final SettingsObjectRetriever<String> nameSupplier;
+	private final SettingsDoubleRetriever baseIncomeSupplier;
+	private final SettingsDoubleRetriever baseUpgradePriceSupplier;
 
 	FarmType(FarmBuilder builder, SettingsObjectRetriever<String> nameSupplier, SettingsDoubleRetriever baseIncomeSupplier, SettingsDoubleRetriever baseUpgradePriceSupplier) {
 		this.builder = builder;
