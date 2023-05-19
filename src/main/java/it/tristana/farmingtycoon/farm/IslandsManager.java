@@ -21,6 +21,7 @@ import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.session.ClipboardHolder;
 
 import it.tristana.commons.helper.CommonsHelper;
+import it.tristana.commons.interfaces.database.UsersManager;
 import it.tristana.farmingtycoon.Main;
 import it.tristana.farmingtycoon.config.ConfigIslandCounter;
 import it.tristana.farmingtycoon.config.SettingsIslands;
@@ -29,12 +30,14 @@ import it.tristana.farmingtycoon.database.FarmingUser;
 public class IslandsManager {
 
 	private final Main plugin;
+	private final UsersManager<FarmingUser> usersManager;
 	private final SettingsIslands settings;
 	private final ConfigIslandCounter configIslandCounter;
 	private IslandPos previous;
 
-	public IslandsManager(Main plugin, SettingsIslands settings, ConfigIslandCounter configIslandCounter) {
+	public IslandsManager(Main plugin, UsersManager<FarmingUser> usersManager, SettingsIslands settings, ConfigIslandCounter configIslandCounter) {
 		this.plugin = plugin;
+		this.usersManager = usersManager;
 		this.settings = settings;
 		this.configIslandCounter = configIslandCounter;
 		// No sanity control is performed over this: the program
@@ -60,6 +63,7 @@ public class IslandsManager {
 						.ignoreAirBlocks(true)
 						.build();
 				Operations.complete(operation);
+				CommonsHelper.broadcast("&aBuilt island at " + CommonsHelper.locationToString(pos));
 			}
 		} catch (Exception e) {
 			CommonsHelper.consoleInfo("&cCouldn't paste the worldedit schematic!");
@@ -81,6 +85,21 @@ public class IslandsManager {
 
 		int distance = settings.getIslandsDistance();
 		return new IslandPos(location.getBlockX() / distance, location.getBlockZ() / distance);
+	}
+	
+	public Island getIsland(Location location) {
+		return getIsland(fromLocation(location));
+	}
+	
+	public Island getIsland(IslandPos pos) {
+		for (FarmingUser user : usersManager.getUsers()) {
+			Island island = user.getIsland();
+			if (fromLocation(island.toLocation()).equals(pos)) {
+				return island;
+			}
+		}
+		
+		return null;
 	}
 
 	public int getIslandsHeight() {
