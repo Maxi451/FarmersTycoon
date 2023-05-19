@@ -111,7 +111,7 @@ public class ConfigFarm extends Config {
 	public static final String DEAD_BUSH_BASE_UPGRADE_PRICE = DEAD_BUSH + BASE_UPGRADE_PRICE;
 
 	public ConfigFarm(File folder) {
-		super(folder);
+		super(new File(folder, "farm.yml"));
 	}
 
 	@Override

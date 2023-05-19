@@ -1,7 +1,14 @@
 name: FarmingTycoon
 version: 1.0.6
-main: it.tristana.farming.Main
+main: it.tristana.farmingtycoon.Main
 description: Tycoon with Minecraft crops
 author: Massimiliano Micol
+api-version: 1.19
 depend: [TristanaCommons, WorldEdit]
 softdepend: [FastAsyncWorldEdit, PlaceholderAPI]
+commands:
+  farm:
+    description: Main command
+    usage: Type /farm help
+    permission: farm.player
+    default: true

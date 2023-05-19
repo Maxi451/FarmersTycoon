@@ -8,6 +8,8 @@ import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 
 import it.tristana.commons.database.DatabaseManager;
+import it.tristana.commons.database.SqlConsumer;
+import it.tristana.commons.database.SqlRetriever;
 import it.tristana.commons.helper.CommonsHelper;
 import it.tristana.farmingtycoon.Main;
 import it.tristana.farmingtycoon.farm.Farm;
@@ -18,7 +20,6 @@ import it.tristana.farmingtycoon.farm.IslandsManager;
 public class FarmingDatabase extends DatabaseManager<FarmingUser> {
 
 	private final Main plugin;
-	private final IslandsManager islandsBroker;
 	private final String tableIslands;
 	private final String tableFarms;
 	private final String tablePlayers;
@@ -26,7 +27,6 @@ public class FarmingDatabase extends DatabaseManager<FarmingUser> {
 	public FarmingDatabase(String host, String database, String username, String password, int port, Main plugin, String tableIslands, String tableFarms, String tablePlayers) {
 		super(host, database, username, password, port);
 		this.plugin = plugin;
-		this.islandsBroker = plugin.getIslandsBroker();
 		this.tableIslands = tableIslands;
 		this.tableFarms = tableFarms;
 		this.tablePlayers = tablePlayers;
@@ -43,7 +43,7 @@ public class FarmingDatabase extends DatabaseManager<FarmingUser> {
 
 		executeQueryAsync(String.format("SELECT money, amount, farm_type, level, total_income, pos_x, pos_y"
 				+ " from %s left join %s on %s.uuid = %s.player_uuid left join %s on %s.uuid = %s.player_uuid"
-				+ " where uuid = '%s'", tablePlayers, tableFarms, tableIslands, tablePlayers, tableIslands, uuid), resultSet -> {
+				+ " where uuid = '%s'", tablePlayers, tableFarms, tablePlayers, tableFarms, tableIslands, tablePlayers, tableFarms, uuid), resultSet -> {
 
 					if (!resultSet.isBeforeFirst()) {
 						if (createIfMissing) {
@@ -107,8 +107,9 @@ public class FarmingDatabase extends DatabaseManager<FarmingUser> {
 	}
 
 	private void createUser(FarmingUser user) {
-		Location pos = islandsBroker.generate(user);
-		Island island = new Island(user, islandsBroker.getIslandsWorld(), pos.getBlockX(), islandsBroker.getIslandsHeight(), pos.getBlockZ());
+		IslandsManager islandsManager = plugin.getIslandsBroker();
+		Location pos = islandsManager.generate(user);
+		Island island = new Island(user, islandsManager.getIslandsWorld(), pos.getBlockX(), islandsManager.getIslandsHeight(), pos.getBlockZ());
 		user.load(0, island, FarmType.asList().stream().map(type -> new Farm(user, type)).collect(Collectors.toList()).toArray(new Farm[0]));
 	}
 
@@ -123,7 +124,7 @@ public class FarmingDatabase extends DatabaseManager<FarmingUser> {
 		int posX = resultSet.getInt("pos_x");
 		int posY = resultSet.getInt("pos_y");
 		int posZ = resultSet.getInt("pos_z");
-		return new Island(user, islandsBroker.getIslandsWorld(), posX, posY, posZ);
+		return new Island(user, plugin.getIslandsBroker().getIslandsWorld(), posX, posY, posZ);
 	}
 
 	private Farm[] parseFarms(FarmingUser user, ResultSet resultSet) throws SQLException {
@@ -146,5 +147,23 @@ public class FarmingDatabase extends DatabaseManager<FarmingUser> {
 		}
 
 		return new Farm(user, type, resultSet.getInt("amount"), resultSet.getInt("level"), resultSet.getDouble("total_income"));
+	}
+	
+	@Override
+	public void executeQuery(String sql, SqlConsumer action) throws SQLException {
+		CommonsHelper.consoleInfo("&a" + sql);
+		super.executeQuery(sql, action);
+	}
+	
+	@Override
+	public <T> T executeQuery(String sql, SqlRetriever<T> action) throws SQLException {
+		CommonsHelper.consoleInfo("&a" + sql);
+		return super.executeQuery(sql, action);
+	}
+	
+	@Override
+	public void executeUpdate(String sql) throws SQLException {
+		CommonsHelper.consoleInfo("&a" + sql);
+		super.executeUpdate(sql);
 	}
 }

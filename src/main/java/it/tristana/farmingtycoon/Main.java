@@ -100,7 +100,7 @@ public class Main extends PluginDraft implements Reloadable, DatabaseHolder {
 	public UsersManager<FarmingUser> getUsersManager() {
 		return usersManager;
 	}
-	
+
 	public SettingsMessages getSettingsMessages() {
 		return settingsMessages;
 	}
@@ -108,7 +108,7 @@ public class Main extends PluginDraft implements Reloadable, DatabaseHolder {
 	public SettingsFarm getSettingsFarm() {
 		return settingsFarm;
 	}
-	
+
 	public SettingsIslands getSettingsIslands() {
 		return settingsIslands;
 	}
@@ -120,7 +120,7 @@ public class Main extends PluginDraft implements Reloadable, DatabaseHolder {
 	public File getSchematic(String name) {
 		return new File(schematicsFolder, name);
 	}
-	
+
 	public boolean isPapiEnabled() {
 		return isPapiEnabled;
 	}
@@ -131,6 +131,7 @@ public class Main extends PluginDraft implements Reloadable, DatabaseHolder {
 			return schematicsFolder;
 		}
 
+		schematicsFolder.mkdirs();
 		Files.copy(getResource(DEFAULT_SCHEMATIC_FILE), Path.of(new File(schematicsFolder, DEFAULT_SCHEMATIC_FILE).getAbsolutePath()));
 		return schematicsFolder;
 	}
