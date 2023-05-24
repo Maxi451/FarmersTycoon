@@ -22,16 +22,19 @@ import it.tristana.farmingtycoon.config.ConfigMessages;
 import it.tristana.farmingtycoon.config.SettingsFarm;
 import it.tristana.farmingtycoon.config.SettingsIslands;
 import it.tristana.farmingtycoon.config.SettingsMessages;
+import it.tristana.farmingtycoon.config.SettingsScoreboard;
 import it.tristana.farmingtycoon.database.FarmingDatabase;
 import it.tristana.farmingtycoon.database.FarmingUser;
 import it.tristana.farmingtycoon.farm.IslandsManager;
 import it.tristana.farmingtycoon.helper.FarmingPapiHook;
+import it.tristana.farmingtycoon.listener.GrassListener;
+import it.tristana.farmingtycoon.scoreboard.FarmingScoreboardManager;
 
 public class Main extends PluginDraft implements Reloadable, DatabaseHolder {
 
-	public static final String DEFAULT_SCHEMATIC_FILE = "default_farm.schematic";
+	public static final String DEFAULT_SCHEMATIC_FILE = "default_farm.schem";
 
-	private static final long SAVE_TIMEOUT = 60 * 60 * 1000;
+	private static final long SAVE_TIMEOUT = 60 * 60 * 1000 / 20;
 
 	private File folder;
 	private File schematicsFolder;
@@ -44,10 +47,12 @@ public class Main extends PluginDraft implements Reloadable, DatabaseHolder {
 	private Clock usersClock;
 
 	private IslandsManager islandsManager;
+	private FarmingScoreboardManager scoreboardManager;
 
 	private SettingsMessages settingsMessages;
 	private SettingsFarm settingsFarm;
 	private SettingsIslands settingsIslands;
+	private SettingsScoreboard settingsScoreboard;
 	private ConfigIslandCounter configIslandCounter;
 
 	@Override
@@ -56,7 +61,7 @@ public class Main extends PluginDraft implements Reloadable, DatabaseHolder {
 		try {
 			schematicsFolder = checkSchematicsFolder();
 			database = getDatabase();
-			database.closeConnection(database.openConnection());
+			database.createTables();
 		} catch (Exception e) {
 			writeThrowableOnErrorsFile(e);
 			CommonsHelper.consoleInfo("Can't open the database connection! Check the config and the errors file");
@@ -70,7 +75,8 @@ public class Main extends PluginDraft implements Reloadable, DatabaseHolder {
 		registerListeners();
 		isPapiEnabled = Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null;
 		if (isPapiEnabled) {
-			new FarmingPapiHook(this, usersManager);
+			CommonsHelper.consoleInfo("&aEnabling Papi support");
+			new FarmingPapiHook(this, usersManager).register();
 		}
 		registerCommand(this, FarmCommand.class, "farm", ConfigMessages.FILE_NAME);
 	}
@@ -90,6 +96,7 @@ public class Main extends PluginDraft implements Reloadable, DatabaseHolder {
 		settingsMessages.reload();
 		settingsFarm.reload();
 		settingsIslands.reload();
+		settingsScoreboard.reload();
 	}
 
 	@Override
@@ -140,20 +147,25 @@ public class Main extends PluginDraft implements Reloadable, DatabaseHolder {
 		settingsMessages = new SettingsMessages(folder);
 		settingsIslands = new SettingsIslands(folder);
 		settingsFarm = new SettingsFarm(folder);
+		settingsScoreboard = new SettingsScoreboard(folder);
 		configIslandCounter = new ConfigIslandCounter(folder);
 	}
 
 	private void setupManagers() {
 		usersManager = new BasicUsersManager<>(database);
 		islandsManager = new IslandsManager(this, usersManager, settingsIslands, configIslandCounter);
+		scoreboardManager = new FarmingScoreboardManager(this, settingsScoreboard);
 	}
 
 	private void registerListeners() {
 		register(new LoginQuitListener<>(usersManager, database, this, (loginEvent, user) -> {
 			usersClock.add(user);
+			scoreboardManager.addUser(user);
 		}, (quitEvent, user) -> {
 			usersClock.remove(user);
+			scoreboardManager.removeUser(user);
 		}));
+		register(new GrassListener(usersManager, islandsManager, settingsFarm));
 	}
 
 	private void startClocks() {
@@ -162,7 +174,8 @@ public class Main extends PluginDraft implements Reloadable, DatabaseHolder {
 		autosaveClock.schedule(this, SAVE_TIMEOUT);
 
 		usersClock = new Clock();
-		usersClock.schedule(this, 1000);
+		usersClock.schedule(this, 20);
+		usersClock.add(scoreboardManager);
 	}
 
 	private void stopClocks() {

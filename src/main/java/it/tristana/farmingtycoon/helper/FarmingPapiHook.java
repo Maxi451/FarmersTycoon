@@ -39,4 +39,9 @@ public final class FarmingPapiHook extends BasicPapiHook<Main, FarmingUser> {
 	public String getIdentifier() {
 		return "ft";
 	}
+	
+	@Override
+	public boolean register() {
+		return super.register();
+	}
 }

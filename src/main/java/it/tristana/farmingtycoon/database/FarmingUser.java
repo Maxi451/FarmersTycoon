@@ -1,15 +1,22 @@
 package it.tristana.farmingtycoon.database;
 
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import it.tristana.commons.database.BasicUser;
+import it.tristana.commons.helper.CommonsHelper;
 import it.tristana.commons.interfaces.Tickable;
 import it.tristana.commons.interfaces.shop.BalanceHolder;
+import it.tristana.farmingtycoon.Main;
 import it.tristana.farmingtycoon.farm.Farm;
+import it.tristana.farmingtycoon.farm.FarmType;
 import it.tristana.farmingtycoon.farm.Island;
 
 public class FarmingUser extends BasicUser implements BalanceHolder, Tickable {
 
+	private static final Main plugin = JavaPlugin.getPlugin(Main.class);
+	
 	private volatile double money;
 	private volatile Island island;
 	private volatile Farm[] farms;
@@ -59,10 +66,19 @@ public class FarmingUser extends BasicUser implements BalanceHolder, Tickable {
 		this.island = island;
 		this.farms = farms;
 		isLoaded = true;
+		Bukkit.getScheduler().runTask(plugin, () -> {
+			FarmType.asList().forEach(type -> type.update(island));
+		});
+		
+		CommonsHelper.broadcast("&aLoaded " + player.getName() + "'s data! farms == null ? " + (farms == null));
 	}
 	
 	public Island getIsland() {
 		return island;
+	}
+	
+	public Farm fromFarmType(FarmType type) {
+		return farms[type.ordinal()];
 	}
 	
 	Farm[] getFarms() {

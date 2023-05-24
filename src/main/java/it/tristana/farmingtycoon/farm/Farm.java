@@ -18,6 +18,7 @@ public class Farm implements Tickable {
 	private double totalIncome;
 
 	private double cachedIncomePerSecond;
+	private double cachedNextBuyPrice;
 	private double cachedNextUpgradePrice;
 
 	public Farm(FarmingUser owner, FarmType farmType) {
@@ -30,6 +31,7 @@ public class Farm implements Tickable {
 		this.amount = amount;
 		this.level = level;
 		this.totalIncome = totalIncome;
+		recalcNextBuyPrice();
 		recalcNextUpgradePrice();
 		recalcMoneyPerSecond();
 	}
@@ -42,7 +44,7 @@ public class Farm implements Tickable {
 
 		owner.giveMoney(cachedIncomePerSecond);
 		totalIncome += cachedIncomePerSecond;
-		farmType.update(owner.getIsland());
+		farmType.update(owner.getIsland(), level, cachedIncomePerSecond, cachedNextBuyPrice, owner.getMoney());
 	}
 
 	public FarmingUser getOwner() {
@@ -54,6 +56,7 @@ public class Farm implements Tickable {
 	}
 
 	public void upgrade() {
+		farmType.build(owner.getIsland(), amount);
 		amount ++;
 		recalcNextUpgradePrice();
 		recalcMoneyPerSecond();
@@ -75,6 +78,10 @@ public class Farm implements Tickable {
 	public double getTotalIncome() {
 		return totalIncome;
 	}
+	
+	public double getNextBuyPrice() {
+		return cachedNextBuyPrice;
+	}
 
 	public double getNextUpgradePrice() {
 		return cachedNextUpgradePrice;
@@ -82,6 +89,10 @@ public class Farm implements Tickable {
 
 	public double getIncomePerSecond() {
 		return cachedIncomePerSecond;
+	}
+
+	private void recalcNextBuyPrice() {
+		cachedNextBuyPrice = farmType.getBaseBuyPrice() * Math.pow(settings.getBuyPriceMultiplier(), amount);
 	}
 
 	private void recalcNextUpgradePrice() {

@@ -27,15 +27,16 @@ sealed class FarmBuilder permits CactusBuilder, DirectionalFarmBuilder, Mushroom
 			"{name}",
 			"{level}",
 			"{mps}",
-			"{total}"	
+			"{price}",
+			"{price_affordable}"
 	};
 
-	private static final int X_OFFSET = 10;
-	private static final int Y_OFFSET = 3;
+	private static final int X_OFFSET = 11;
+	private static final int Y_OFFSET = 2;
 	private static final int Z_OFFSET = 9;
 
 	private static final int WIDTH = 5;
-	private static final int LENGTH = 150;
+	private static final int LENGTH = 100;
 
 	private static final BlockFace SIGN_ROTATION = BlockFace.NORTH;
 
@@ -58,17 +59,17 @@ sealed class FarmBuilder permits CactusBuilder, DirectionalFarmBuilder, Mushroom
 		int y = getFarmfieldY(island);
 		int z = getFarmfieldZ(island) + row;
 		if (row == 0) {
-			updateSign(island);
 			placeTerrain(world, x, y, z, WIDTH, LENGTH);
 		}
 		build(world, x, y + 1, z, row, WIDTH);
+		updateSign(island);
 	}
 
-	final void updateSign(Island island) {
-		updateSign(island, 0, 0, 0);
+	void updateSign(Island island) {
+		updateSign(island, 0, 0, type.getBaseBuyPrice(), 0);
 	}
 
-	final void updateSign(Island island, int level, double incomePerSecond, double totalMoney) {
+	final void updateSign(Island island, int level, double incomePerSecond, double nextUpgradePrice, double money) {
 		Block block = getSignLocation(island).getBlock();
 		if (block.getType() != Material.OAK_WALL_SIGN) {
 			block.setType(Material.OAK_WALL_SIGN, false);
@@ -80,7 +81,7 @@ sealed class FarmBuilder permits CactusBuilder, DirectionalFarmBuilder, Mushroom
 		Sign sign = (Sign) block.getState();
 		sign.setGlowingText(true);
 		String[] lines = plugin.getSettingsIslands().getFarmSignLines();
-		String[] replacements = new String[] { type.getName(), valueOf(level), valueOf(incomePerSecond), valueOf(totalMoney) };
+		String[] replacements = new String[] { type.getName(), valueOf(level), valueOf(incomePerSecond), valueOf(nextUpgradePrice), money >= nextUpgradePrice ? "a" : "c" };
 		for (int i = 0; i < lines.length; i ++) {
 			sign.setLine(i, CommonsHelper.replaceAll(lines[i], farmSignKeywords, replacements));
 		}
@@ -88,7 +89,7 @@ sealed class FarmBuilder permits CactusBuilder, DirectionalFarmBuilder, Mushroom
 	}
 
 	final Location getSignLocation(Island island) {
-		return new Location(island.world(), getFarmfieldX(island) - 2, getFarmfieldY(island) + 1, getFarmfieldZ(island) - 2);
+		return new Location(island.world(), getFarmfieldX(island) + 2, getFarmfieldY(island) + 1, getFarmfieldZ(island) - 2);
 	}
 
 	final void setType(FarmType type) {
@@ -111,7 +112,7 @@ sealed class FarmBuilder permits CactusBuilder, DirectionalFarmBuilder, Mushroom
 
 	final void build(World world, int x, int y, int z, int row, int width) {
 		int height = getCropHeight();
-		for (int i = x; i < x + width; x ++) {
+		for (int i = x; i < x + width; i ++) {
 			for (int iii = y; iii < y + height; iii ++) {
 				Block block = world.getBlockAt(i, iii, z);
 				block.setType(getCropAt(row, i - x, iii - y), false);
@@ -119,7 +120,7 @@ sealed class FarmBuilder permits CactusBuilder, DirectionalFarmBuilder, Mushroom
 			}
 		}
 
-		for (int i = x; i < x + width; x ++) {
+		for (int i = x; i < x + width; i ++) {
 			for (int iii = y; iii < y + height; iii ++) {
 				checkDirection(world.getBlockAt(i, iii, z));
 			}
@@ -163,7 +164,7 @@ sealed class FarmBuilder permits CactusBuilder, DirectionalFarmBuilder, Mushroom
 	void updateDirection(Block block, Directional directional) {}
 
 	private final int getFarmfieldX(Island island) {
-		return island.posX() + X_OFFSET + WIDTH * type.ordinal();
+		return island.posX() + X_OFFSET + (WIDTH + 1) * type.ordinal();
 	}
 
 	private final int getFarmfieldY(Island island) {

@@ -41,12 +41,15 @@ public class FarmingDatabase extends DatabaseManager<FarmingUser> {
 		FarmingUser[] user = new FarmingUser[] { new FarmingUser(player) }; // Ugly hack to pass by reference
 		String uuid = getUuid(player);
 
-		executeQueryAsync(String.format("SELECT money, amount, farm_type, level, total_income, pos_x, pos_y"
+		executeQueryAsync(String.format("SELECT money, amount, farm_type, level, total_income, pos_x, pos_y, pos_z"
 				+ " from %s left join %s on %s.uuid = %s.player_uuid left join %s on %s.uuid = %s.player_uuid"
 				+ " where uuid = '%s'", tablePlayers, tableFarms, tablePlayers, tableFarms, tableIslands, tablePlayers, tableFarms, uuid), resultSet -> {
 
+					CommonsHelper.broadcast("&aQuery executed");
 					if (!resultSet.isBeforeFirst()) {
+						CommonsHelper.broadcast("&aNot Before First");
 						if (createIfMissing) {
+							CommonsHelper.broadcast("&aCreating new");
 							createUser(user[0]);
 						} else {
 							user[0] = null;
@@ -54,6 +57,7 @@ public class FarmingDatabase extends DatabaseManager<FarmingUser> {
 						return;
 					}
 
+					CommonsHelper.broadcast("&aParsing existing");
 					parseUser(user[0], resultSet);
 				}, error -> {
 					CommonsHelper.consoleInfo("&cError while loading " + player.getName() + " (" + uuid + ")'s data!");
@@ -68,28 +72,34 @@ public class FarmingDatabase extends DatabaseManager<FarmingUser> {
 		String uuid = getUuid(player);
 		new Thread(() -> {
 			try {
-				executeUpdate(String.format("REPLACE INTO %s (uuid, money) VALUES ('%s', %.3f);",
-						tablePlayers, uuid, user.getMoney()));
+				double money = user.getMoney();
+				executeUpdate(String.format("INSERT INTO %s (uuid, money) VALUES ('%s', %.3f)"
+						+ "ON DUPLICATE KEY UPDATE money = %.3f;",
+						tablePlayers, uuid, money, money));
 				for (Farm farm : user.getFarms()) {
-					executeUpdate(String.format("REPLACE INTO %s (player_uuid, farm_type, amount, level, total_income) VALUES ('%s', %d, %d, %d, %.3f);",
-							tableFarms, uuid, farm.getFarmType().ordinal(), farm.getAmount(), farm.getLevel(), farm.getTotalIncome()));
+					int amount = farm.getAmount();
+					int level = farm.getLevel();
+					double totalIncome = farm.getTotalIncome();
+					executeUpdate(String.format("INSERT INTO %s (player_uuid, farm_type, amount, level, total_income) VALUES ('%s', %d, %d, %d, %.3f)"
+							+ "ON DUPLICATE KEY UPDATE amount = %d, level = %d, total_income = %.3f;",
+							tableFarms, uuid, farm.getFarmType().ordinal(), amount, level, totalIncome, amount, level, totalIncome));
 				}
 				Island island = user.getIsland();
-				executeUpdate(String.format("REPLACE INTO %s (uuid, pos_x, pos_y, pos_z) VALUES ('%s', %d, %d, %d);",
-						tableIslands, uuid, island.posX(), island.posY(), island.posZ()));
+				executeUpdate(String.format("INSERT INTO %s (player_uuid, pos_x, pos_y, pos_z) VALUES ('%s', %d, %d, %d)"
+						+ "ON DUPLICATE KEY UPDATE pos_x = %d, pos_y = %d, pos_z = %d;",
+						tableIslands, uuid, island.posX(), island.posY(), island.posZ(), island.posX(), island.posY(), island.posZ()));
 			} catch (SQLException e) {
 				CommonsHelper.consoleInfo("&cError while saving " + player.getName() + " (" + uuid + ")'s data!");
+				plugin.writeThrowableOnErrorsFile(e);
 			}
 		}).start();
 	}
 
 	@Override
 	public void createTables() throws SQLException {
-		executeUpdate("CREATE TABLE IF NOT EXISTS " + tableIslands + " ("
-				+ "	player_uuid CHAR(36) PRIMARY KEY,"
-				+ "	pos_x INTEGER NOT NULL,"
-				+ " pos_y INTEGER NOT NULL,"
-				+ "	pos_z INTEGER NOT NULL"
+		executeUpdate("CREATE TABLE IF NOT EXISTS " + tablePlayers + "("
+				+ "	uuid CHAR(36) PRIMARY KEY,"
+				+ "	money DECIMAL(53, 3) UNSIGNED NOT NULL DEFAULT 0"
 				+ ");");
 		executeUpdate("CREATE TABLE IF NOT EXISTS " + tableFarms + " ("
 				+ " player_uuid CHAR(36),"
@@ -99,10 +109,15 @@ public class FarmingDatabase extends DatabaseManager<FarmingUser> {
 				+ "	total_income DECIMAL(53, 3) UNSIGNED NOT NULL DEFAULT 0,"
 				+ " PRIMARY KEY (player_uuid, farm_type),"
 				+ " FOREIGN KEY (player_uuid) REFERENCES " + tablePlayers + "(uuid)"
+				+ " ON UPDATE CASCADE ON DELETE CASCADE"
 				+ ");");
-		executeUpdate("CREATE TABLE IF NOT EXISTS " + tablePlayers + "("
-				+ "	uuid CHAR(36) PRIMARY KEY,"
-				+ "	money DECIMAL(53, 3) UNSIGNED NOT NULL DEFAULT 0"
+		executeUpdate("CREATE TABLE IF NOT EXISTS " + tableIslands + " ("
+				+ "	player_uuid CHAR(36) PRIMARY KEY,"
+				+ "	pos_x INTEGER NOT NULL,"
+				+ " pos_y INTEGER NOT NULL,"
+				+ "	pos_z INTEGER NOT NULL,"
+				+ " FOREIGN KEY (player_uuid) REFERENCES " + tablePlayers + "(uuid)"
+				+ " ON UPDATE CASCADE ON DELETE CASCADE"
 				+ ");");
 	}
 

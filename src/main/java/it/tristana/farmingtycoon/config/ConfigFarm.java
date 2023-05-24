@@ -6,6 +6,7 @@ import it.tristana.commons.config.Config;
 
 public class ConfigFarm extends Config {
 
+	public static final String BUY_PRICE_MULTIPLIER = "buy-price-multiplier";
 	public static final String UPGRADE_PRICE_MULTIPLIER = "upgrade-price-multiplier";
 	public static final String INCOME_LEVEL_MULTIPLIER = "income-level-multiplier";
 	
@@ -14,6 +15,16 @@ public class ConfigFarm extends Config {
 	private static final String BASE_BUY_PRICE = "base-buy-price";
 	private static final String BASE_UPGRADE_PRICE = "base-upgrade-price";
 
+	private static final String GRASS = "grass.";
+	public static final String GRASS_NAME = GRASS + NAME;
+	public static final String GRASS_BASE_INCOME = GRASS + BASE_INCOME;
+	public static final String GRASS_BASE_UPGRADE_PRICE = GRASS + BASE_UPGRADE_PRICE;
+	public static final String GRASS_LEVEL_MULTIPLIER = GRASS + "level-multiplier";
+	public static final String GRASS_UPGRADE_PRICE_MULTIPLIER = GRASS + UPGRADE_PRICE_MULTIPLIER;
+	public static final String GRASS_TICKS_RESET = GRASS + "ticks-reset";
+	public static final String GRASS_INCREASE_MULTIPLIER_PERFECT = "increase-multiplier-perfect";
+	public static final String GRASS_MAX_MULTIPLIER = GRASS + "max-multiplier";
+	
 	private static final String WHEAT = "wheat.";
 	public static final String WHEAT_NAME = WHEAT + NAME;
 	public static final String WHEAT_BASE_INCOME = WHEAT + BASE_INCOME;
@@ -116,8 +127,18 @@ public class ConfigFarm extends Config {
 
 	@Override
 	protected void createDefault() {
-		set(UPGRADE_PRICE_MULTIPLIER, "1.4");
+		set(BUY_PRICE_MULTIPLIER, "1.4");
+		set(UPGRADE_PRICE_MULTIPLIER, "10");
 		set(INCOME_LEVEL_MULTIPLIER, "2");
+		
+		set(GRASS_NAME, "Grass");
+		set(GRASS_BASE_INCOME, "1");
+		set(GRASS_BASE_UPGRADE_PRICE, "10000");
+		set(GRASS_LEVEL_MULTIPLIER, "25");
+		set(GRASS_UPGRADE_PRICE_MULTIPLIER, "1000");
+		set(GRASS_TICKS_RESET, "60");
+		set(GRASS_INCREASE_MULTIPLIER_PERFECT, "0.05");
+		set(GRASS_MAX_MULTIPLIER, "3");
 		
 		set(WHEAT_NAME, "Wheat");
 		set(WHEAT_BASE_INCOME, "0.1");

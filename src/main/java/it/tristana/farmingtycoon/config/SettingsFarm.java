@@ -7,8 +7,15 @@ import it.tristana.commons.helper.CommonsHelper;
 
 public class SettingsFarm extends Settings<ConfigFarm> {
 
+	private double buyPriceMultiplier;
 	private double upgradePriceMultiplier;
 	private double incomeLevelMultiplier;
+	
+	private String grassName;
+	private double grassBaseIncome;
+	private double grassBaseUpgradePrice;
+	private double grassLevelMultiplier;
+	private double grassUpgradePriceMultiplier;
 	
 	private String wheatName;
 	private double wheatBaseIncome;
@@ -96,8 +103,15 @@ public class SettingsFarm extends Settings<ConfigFarm> {
 
 	@Override
 	protected void reload(ConfigFarm config) {
-		upgradePriceMultiplier = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.UPGRADE_PRICE_MULTIPLIER), 1.4);
+		buyPriceMultiplier = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.BUY_PRICE_MULTIPLIER), 1.4);
+		upgradePriceMultiplier = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.UPGRADE_PRICE_MULTIPLIER), 10);
 		incomeLevelMultiplier = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.INCOME_LEVEL_MULTIPLIER), 2);
+
+		grassName = config.getString(ConfigFarm.GRASS_NAME);
+		grassBaseIncome = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.GRASS_BASE_INCOME), 1);
+		grassBaseUpgradePrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.GRASS_BASE_UPGRADE_PRICE), 10000);
+		grassLevelMultiplier = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.GRASS_LEVEL_MULTIPLIER), 25);
+		grassUpgradePriceMultiplier = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.GRASS_UPGRADE_PRICE_MULTIPLIER), 1000);
 		
 		wheatName = config.getString(ConfigFarm.WHEAT_NAME);
 		wheatBaseIncome = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.WHEAT_BASE_INCOME), 0.2);
@@ -178,6 +192,30 @@ public class SettingsFarm extends Settings<ConfigFarm> {
 		deadBushBaseIncome = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.DEAD_BUSH_BASE_INCOME), 0.2);
 		deadBushBaseBuyPrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.DEAD_BUSH_BASE_BUY_PRICE), 25);
 		deadBushBaseUpgradePrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.DEAD_BUSH_BASE_UPGRADE_PRICE), 0);
+	}
+	
+	public String getGrassName() {
+		return grassName;
+	}
+
+	public double getGrassBaseIncome() {
+		return grassBaseIncome;
+	}
+
+	public double getGrassBaseUpgradePrice() {
+		return grassBaseUpgradePrice;
+	}
+
+	public double getGrassLevelMultiplier() {
+		return grassLevelMultiplier;
+	}
+
+	public double getGrassUpgradePriceMultiplier() {
+		return grassUpgradePriceMultiplier;
+	}
+
+	public double getBuyPriceMultiplier() {
+		return buyPriceMultiplier;
 	}
 
 	public double getUpgradePriceMultiplier() {
