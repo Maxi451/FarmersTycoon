@@ -16,6 +16,9 @@ public class SettingsFarm extends Settings<ConfigFarm> {
 	private double grassBaseUpgradePrice;
 	private double grassLevelMultiplier;
 	private double grassUpgradePriceMultiplier;
+	private int grassResetTicks;
+	private double grassIncreaseMultiplierPerfect;
+	private double grassMaxMultiplier;
 	
 	private String wheatName;
 	private double wheatBaseIncome;
@@ -112,6 +115,9 @@ public class SettingsFarm extends Settings<ConfigFarm> {
 		grassBaseUpgradePrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.GRASS_BASE_UPGRADE_PRICE), 10000);
 		grassLevelMultiplier = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.GRASS_LEVEL_MULTIPLIER), 25);
 		grassUpgradePriceMultiplier = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.GRASS_UPGRADE_PRICE_MULTIPLIER), 1000);
+		grassResetTicks = CommonsHelper.parseIntOrGetDefault(config.getString(ConfigFarm.GRASS_RESET_TICKS), 60);
+		grassIncreaseMultiplierPerfect = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.GRASS_INCREASE_MULTIPLIER_PERFECT), 0.05);
+		grassMaxMultiplier = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.GRASS_MAX_MULTIPLIER), 3);
 		
 		wheatName = config.getString(ConfigFarm.WHEAT_NAME);
 		wheatBaseIncome = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.WHEAT_BASE_INCOME), 0.2);
@@ -194,6 +200,18 @@ public class SettingsFarm extends Settings<ConfigFarm> {
 		deadBushBaseUpgradePrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.DEAD_BUSH_BASE_UPGRADE_PRICE), 0);
 	}
 	
+	public int getGrassResetTicks() {
+		return grassResetTicks;
+	}
+
+	public double getGrassIncreaseMultiplierPerfect() {
+		return grassIncreaseMultiplierPerfect;
+	}
+
+	public double getGrassMaxMultiplier() {
+		return grassMaxMultiplier;
+	}
+
 	public String getGrassName() {
 		return grassName;
 	}

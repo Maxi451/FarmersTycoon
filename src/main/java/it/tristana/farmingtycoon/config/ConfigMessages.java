@@ -16,6 +16,8 @@ public class ConfigMessages extends Config {
 	private static final String EXECUTED = "executed";
 
 	public static final String WAITING_PROFILE_LOAD = "waiting-profile-load";
+	public static final String GRASS_PERFECT_CLEAR_TITLE = "grass-perfect-clear-title";
+	public static final String GRASS_PERFECT_CLEAR_SUBTITLE = "grass-perfect-clear-subtitle";
 
 	private static final String COMMAND_GO = COMMAND + "go.";
 	public static final String COMMAND_GO_EXECUTED = COMMAND_GO + EXECUTED;
@@ -53,6 +55,8 @@ public class ConfigMessages extends Config {
 				));
 
 		set(WAITING_PROFILE_LOAD, "&cThe profile is loading");
+		set(GRASS_PERFECT_CLEAR_TITLE, "&6&lPerfect!");
+		set(GRASS_PERFECT_CLEAR_SUBTITLE, "&a");
 
 		set(COMMAND_GO_EXECUTED, "&aWhoosh!");
 		set(COMMAND_GO_HELP, "Teleports back to your island");

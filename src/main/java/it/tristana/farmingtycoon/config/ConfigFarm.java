@@ -21,7 +21,7 @@ public class ConfigFarm extends Config {
 	public static final String GRASS_BASE_UPGRADE_PRICE = GRASS + BASE_UPGRADE_PRICE;
 	public static final String GRASS_LEVEL_MULTIPLIER = GRASS + "level-multiplier";
 	public static final String GRASS_UPGRADE_PRICE_MULTIPLIER = GRASS + UPGRADE_PRICE_MULTIPLIER;
-	public static final String GRASS_TICKS_RESET = GRASS + "ticks-reset";
+	public static final String GRASS_RESET_TICKS = GRASS + "reset-ticks";
 	public static final String GRASS_INCREASE_MULTIPLIER_PERFECT = "increase-multiplier-perfect";
 	public static final String GRASS_MAX_MULTIPLIER = GRASS + "max-multiplier";
 	
@@ -136,7 +136,7 @@ public class ConfigFarm extends Config {
 		set(GRASS_BASE_UPGRADE_PRICE, "10000");
 		set(GRASS_LEVEL_MULTIPLIER, "25");
 		set(GRASS_UPGRADE_PRICE_MULTIPLIER, "1000");
-		set(GRASS_TICKS_RESET, "60");
+		set(GRASS_RESET_TICKS, "60");
 		set(GRASS_INCREASE_MULTIPLIER_PERFECT, "0.05");
 		set(GRASS_MAX_MULTIPLIER, "3");
 		
