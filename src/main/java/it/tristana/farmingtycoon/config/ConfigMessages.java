@@ -31,10 +31,10 @@ public class ConfigMessages extends Config {
 	protected void createDefault() {
 		set(UNITS, Arrays.asList(
 				"",
-				"th",
-				"mil",
-				"bil",
-				"tril",
+				"Th",
+				"Mil",
+				"Bil",
+				"Tril",
 				"Quad",
 				"Quint",
 				"Sext",
@@ -56,7 +56,7 @@ public class ConfigMessages extends Config {
 
 		set(WAITING_PROFILE_LOAD, "&cThe profile is loading");
 		set(GRASS_PERFECT_CLEAR_TITLE, "&6&lPerfect!");
-		set(GRASS_PERFECT_CLEAR_SUBTITLE, "&a");
+		set(GRASS_PERFECT_CLEAR_SUBTITLE, "&aMultiplier &6{old}x &a-> &6{new}x");
 
 		set(COMMAND_GO_EXECUTED, "&aWhoosh!");
 		set(COMMAND_GO_HELP, "Teleports back to your island");

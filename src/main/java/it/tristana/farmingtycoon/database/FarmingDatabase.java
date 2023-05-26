@@ -14,6 +14,7 @@ import it.tristana.commons.helper.CommonsHelper;
 import it.tristana.farmingtycoon.Main;
 import it.tristana.farmingtycoon.farm.Farm;
 import it.tristana.farmingtycoon.farm.FarmType;
+import it.tristana.farmingtycoon.farm.GrassField;
 import it.tristana.farmingtycoon.farm.Island;
 import it.tristana.farmingtycoon.farm.IslandsManager;
 
@@ -125,7 +126,7 @@ public class FarmingDatabase extends DatabaseManager<FarmingUser> {
 		IslandsManager islandsManager = plugin.getIslandsBroker();
 		Location pos = islandsManager.generate(user);
 		Island island = new Island(user, islandsManager.getIslandsWorld(), pos.getBlockX(), islandsManager.getIslandsHeight(), pos.getBlockZ());
-		user.load(0, island, FarmType.asList().stream().map(type -> new Farm(user, type)).collect(Collectors.toList()).toArray(new Farm[0]));
+		user.load(0, island, FarmType.asList().stream().map(type -> new Farm(user, type)).collect(Collectors.toList()).toArray(new Farm[0]), new GrassField(user));
 	}
 
 	private void parseUser(FarmingUser user, ResultSet resultSet) throws SQLException {

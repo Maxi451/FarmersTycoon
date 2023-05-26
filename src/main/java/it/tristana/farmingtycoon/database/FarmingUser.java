@@ -11,6 +11,7 @@ import it.tristana.commons.interfaces.shop.BalanceHolder;
 import it.tristana.farmingtycoon.Main;
 import it.tristana.farmingtycoon.farm.Farm;
 import it.tristana.farmingtycoon.farm.FarmType;
+import it.tristana.farmingtycoon.farm.GrassField;
 import it.tristana.farmingtycoon.farm.Island;
 
 public class FarmingUser extends BasicUser implements BalanceHolder, Tickable {
@@ -20,6 +21,7 @@ public class FarmingUser extends BasicUser implements BalanceHolder, Tickable {
 	private volatile double money;
 	private volatile Island island;
 	private volatile Farm[] farms;
+	private volatile GrassField grassField;
 
 	private volatile boolean isLoaded;
 
@@ -57,7 +59,7 @@ public class FarmingUser extends BasicUser implements BalanceHolder, Tickable {
 		return flag;
 	}
 
-	public synchronized void load(double money, Island island, Farm[] farms) {
+	public synchronized void load(double money, Island island, Farm[] farms, GrassField grassField) {
 		if (isLoaded) {
 			return;
 		}
@@ -65,6 +67,7 @@ public class FarmingUser extends BasicUser implements BalanceHolder, Tickable {
 		this.money = money;
 		this.island = island;
 		this.farms = farms;
+		this.grassField = grassField;
 		isLoaded = true;
 		Bukkit.getScheduler().runTask(plugin, () -> {
 			FarmType.asList().forEach(type -> type.update(island));
