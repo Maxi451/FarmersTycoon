@@ -28,6 +28,7 @@ import it.tristana.farmingtycoon.database.FarmingUser;
 import it.tristana.farmingtycoon.farm.IslandsManager;
 import it.tristana.farmingtycoon.helper.FarmingPapiHook;
 import it.tristana.farmingtycoon.listener.GrassListener;
+import it.tristana.farmingtycoon.listener.RemovedEventsListener;
 import it.tristana.farmingtycoon.scoreboard.FarmingScoreboardManager;
 
 public class Main extends PluginDraft implements Reloadable, DatabaseHolder {
@@ -75,7 +76,6 @@ public class Main extends PluginDraft implements Reloadable, DatabaseHolder {
 		registerListeners();
 		isPapiEnabled = Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null;
 		if (isPapiEnabled) {
-			CommonsHelper.consoleInfo("&aEnabling Papi support");
 			new FarmingPapiHook(this, usersManager).register();
 		}
 		registerCommand(this, FarmCommand.class, "farm", ConfigMessages.FILE_NAME);
@@ -165,7 +165,8 @@ public class Main extends PluginDraft implements Reloadable, DatabaseHolder {
 			usersClock.remove(user);
 			scoreboardManager.removeUser(user);
 		}));
-		register(new GrassListener(usersManager, islandsManager, settingsFarm));
+		register(new GrassListener(usersManager, islandsManager));
+		register(new RemovedEventsListener());
 	}
 
 	private void startClocks() {
@@ -191,8 +192,9 @@ public class Main extends PluginDraft implements Reloadable, DatabaseHolder {
 		String password = config.getString(ConfigFarmDatabase.PASSWORD);
 		int port = Integer.parseInt(config.getString(ConfigFarmDatabase.PORT));
 		String tablePlayers = config.getString(ConfigFarmDatabase.TABLE_PLAYERS);
+		String tableGrass = config.getString(ConfigFarmDatabase.TABLE_GRASS);
 		String tableIslands = config.getString(ConfigFarmDatabase.TABLE_ISLANDS);
 		String tableFarms = config.getString(ConfigFarmDatabase.TABLE_FARMS);
-		return new FarmingDatabase(host, database, username, password, port, this, tableIslands, tableFarms, tablePlayers);
+		return new FarmingDatabase(host, database, username, password, port, this, tableIslands, tableFarms, tableGrass, tablePlayers);
 	}
 }

@@ -32,7 +32,8 @@ public class CommandGo extends FarmSubCommand {
 			OfflinePlayer offline = Bukkit.getOfflinePlayer(args[1]);
 			FarmingUser user = main.getPlugin().getStorage().getUser(offline, false);
 			if (user == null) {
-				
+				// TODO
+				return;
 			}
 			teleportToIslandOf(player, user);
 		}).start();
@@ -49,6 +50,6 @@ public class CommandGo extends FarmSubCommand {
 	}
 	
 	private void teleportToIslandOf(Player player, FarmingUser user) {
-		player.teleport(user.getIsland().toLocation());
+		player.teleport(user.getIsland().getSpawnpoint());
 	}
 }

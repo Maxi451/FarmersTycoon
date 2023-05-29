@@ -27,10 +27,10 @@ public class ConfigIslands extends Config {
 		set(ISLANDS_DISTANCE, "500");
 		set(DEFAULT_SCHEMATIC_NAME, Main.DEFAULT_SCHEMATIC_FILE);
 		set(FARM_SIGN_LINES, Arrays.asList(
-				"&6&l{name}",
-				"&b&lPrice &{price_affordable}&l{price}",
-				"&b&lLevel &6&l{level}",
-				"&b&lIncome &6&l{mps} / s"
+				"&6{name}",
+				"&bPrice {price_affordable_color}{price}",
+				"&bLevel &6{level}",
+				"&bIncome &6{mps} / s"
 		));
 	}
 }

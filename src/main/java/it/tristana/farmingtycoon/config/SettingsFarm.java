@@ -115,7 +115,7 @@ public class SettingsFarm extends Settings<ConfigFarm> {
 		grassBaseUpgradePrice = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.GRASS_BASE_UPGRADE_PRICE), 10000);
 		grassLevelMultiplier = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.GRASS_LEVEL_MULTIPLIER), 25);
 		grassUpgradePriceMultiplier = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.GRASS_UPGRADE_PRICE_MULTIPLIER), 1000);
-		grassResetTicks = CommonsHelper.parseIntOrGetDefault(config.getString(ConfigFarm.GRASS_RESET_TICKS), 60);
+		grassResetTicks = CommonsHelper.parseIntOrGetDefault(config.getString(ConfigFarm.GRASS_RESET_TICKS), 4);
 		grassIncreaseMultiplierPerfect = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.GRASS_INCREASE_MULTIPLIER_PERFECT), 0.05);
 		grassMaxMultiplier = CommonsHelper.parseDoubleOrGetDefault(config.getString(ConfigFarm.GRASS_MAX_MULTIPLIER), 3);
 		

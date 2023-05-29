@@ -19,46 +19,70 @@ public class GrassField implements Tickable {
 	private static final SettingsFarm settingsFarm = plugin.getSettingsFarm();
 	private static final SettingsMessages settingsMessages = plugin.getSettingsMessages();
 
-	private static final String[] titlePieces = { "{old}", "{new}" };
-	private static final int X_OFFSET = 0;
+	private static final String[] perfectTitlePieces = { "{old}", "{new}" };
+	private static final String[] failedTitlePieces = { "{old}" };
+	private static final int X_OFFSET = 5;
 	private static final int Y_OFFSET = 3;
-	private static final int Z_OFFSET = 0;
-	private static final int LENGTH = 5;
-	private static final int WIDTH = 4;
+	private static final int Z_OFFSET = 1;
+	private static final int LENGTH = 4;
+	private static final int WIDTH = 7;
 
 	private final FarmingUser user;
+	private int level;
 	private int grassLeft;
 	private int ticks;
 	private double currentMultiplier;
+	private double totalIncome;
+
+	private double cachedIncome;
 
 	public GrassField(FarmingUser user) {
-		this.user = user;
+		this(user, 0, 0);
 	}
-	
-	public GrassField() {
-		
+
+	public GrassField(FarmingUser user, int level, double totalIncome) {
+		this.user = user;
+		this.level = level;
+		this.totalIncome = totalIncome;
+		ticks = settingsFarm.getGrassResetTicks();
+		currentMultiplier = 1;
 	}
 
 	@Override
 	public void runTick() {
 		if (++ ticks >= settingsFarm.getGrassResetTicks()) {
 			reset();
+			ticks = 0;
 		}
 	}
 
 	public void onGrassBroken() {
+		user.giveMoney(cachedIncome);
+		totalIncome += cachedIncome;
 		if (-- grassLeft == 0) {
 			String current = format(currentMultiplier);
-			currentMultiplier = Math.max(currentMultiplier * settingsFarm.getGrassIncreaseMultiplierPerfect(), settingsFarm.getGrassMaxMultiplier());
+			currentMultiplier = Math.min(currentMultiplier + settingsFarm.getGrassIncreaseMultiplierPerfect(), settingsFarm.getGrassMaxMultiplier());
 			TitleHelper.send(
 					user.getOnlinePlayer(),
 					settingsMessages.getGrassPerfectClearTitle(),
 					CommonsHelper.replaceAll(
-							settingsMessages.getGrassPerfectClearTitle(),
-							titlePieces,
+							settingsMessages.getGrassPerfectClearSubtitle(),
+							perfectTitlePieces,
 							new String[] { current, format(currentMultiplier) }
 							));
 		}
+	}
+
+	public void upgrade() {
+		level ++;
+	}
+
+	public int getLevel() {
+		return level;
+	}
+
+	public double getTotalIncome() {
+		return totalIncome;
 	}
 
 	private Location getGrassLocation() {
@@ -74,10 +98,34 @@ public class GrassField implements Tickable {
 		int posZ = pos.getBlockZ();
 		for (int x = 0; x < LENGTH; x ++) {
 			for (int z = 0; z < WIDTH; z ++) {
-				world.getBlockAt(x + posX, posY, z + posZ).setType(Material.GRASS);
+				world.getBlockAt(posX + x, posY, posZ + z).setType(Material.GRASS);
 			}
 		}
-		grassLeft = LENGTH * WIDTH;
+		int grassAmount = getGrassAmount();
+		if (grassLeft > 0 && currentMultiplier > 1) {
+			if (grassLeft < grassAmount) {
+				TitleHelper.send(
+						user.getOnlinePlayer(),
+						settingsMessages.getGrassFailedPerfectClearTitle(),
+						CommonsHelper.replaceAll(
+								settingsMessages.getGrassFailedPerfectClearSubtitle(),
+								failedTitlePieces,
+								new String[] { format(currentMultiplier) }
+								)
+						);
+			}
+			currentMultiplier = 1;
+		}
+		grassLeft = grassAmount;
+		cacheIncome();
+	}
+
+	private void cacheIncome() {
+		cachedIncome = settingsFarm.getGrassBaseIncome() * currentMultiplier * Math.pow(settingsFarm.getGrassLevelMultiplier(), level);
+	}
+	
+	private static int getGrassAmount() {
+		return LENGTH * WIDTH;
 	}
 
 	private static String format(double val) {

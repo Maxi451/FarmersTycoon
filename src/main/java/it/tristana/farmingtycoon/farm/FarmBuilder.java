@@ -16,8 +16,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import it.tristana.commons.helper.CommonsHelper;
 import it.tristana.farmingtycoon.Main;
-
-import static java.lang.String.valueOf;
+import static it.tristana.farmingtycoon.helper.NumberFormat.format;
 
 sealed class FarmBuilder permits CactusBuilder, DirectionalFarmBuilder, MushroomBuilder, SugarCaneBuilder {
 
@@ -28,12 +27,18 @@ sealed class FarmBuilder permits CactusBuilder, DirectionalFarmBuilder, Mushroom
 			"{level}",
 			"{mps}",
 			"{price}",
-			"{price_affordable}"
+			"{price_affordable_color}"
 	};
+	private static final String RED_COLOR = CommonsHelper.toChatColors("&c");
+	private static final String GREEN_COLOR = CommonsHelper.toChatColors("&a");
 
 	private static final int X_OFFSET = 11;
 	private static final int Y_OFFSET = 2;
 	private static final int Z_OFFSET = 9;
+	
+	private static final int SIGN_X_OFFSET = 2;
+	private static final int SIGN_Y_OFFSET = 1;
+	private static final int SIGN_Z_OFFSET = -2;
 
 	private static final int WIDTH = 5;
 	private static final int LENGTH = 100;
@@ -62,7 +67,6 @@ sealed class FarmBuilder permits CactusBuilder, DirectionalFarmBuilder, Mushroom
 			placeTerrain(world, x, y, z, WIDTH, LENGTH);
 		}
 		build(world, x, y + 1, z, row, WIDTH);
-		updateSign(island);
 	}
 
 	void updateSign(Island island) {
@@ -70,6 +74,10 @@ sealed class FarmBuilder permits CactusBuilder, DirectionalFarmBuilder, Mushroom
 	}
 
 	final void updateSign(Island island, int level, double incomePerSecond, double nextUpgradePrice, double money) {
+		if (type == FarmType.WHEAT) {
+			CommonsHelper.broadcast(String.format("Updating sign with %.2f income and %.2f nextUpgradePrice", incomePerSecond, nextUpgradePrice));
+		}
+
 		Block block = getSignLocation(island).getBlock();
 		if (block.getType() != Material.OAK_WALL_SIGN) {
 			block.setType(Material.OAK_WALL_SIGN, false);
@@ -79,9 +87,8 @@ sealed class FarmBuilder permits CactusBuilder, DirectionalFarmBuilder, Mushroom
 		data.setFacing(SIGN_ROTATION);
 		block.setBlockData(data, false);
 		Sign sign = (Sign) block.getState();
-		sign.setGlowingText(true);
 		String[] lines = plugin.getSettingsIslands().getFarmSignLines();
-		String[] replacements = new String[] { type.getName(), valueOf(level), valueOf(incomePerSecond), valueOf(nextUpgradePrice), money >= nextUpgradePrice ? "a" : "c" };
+		String[] replacements = { type.getName(), format(level), format(incomePerSecond), format(nextUpgradePrice), money >= nextUpgradePrice ? GREEN_COLOR : RED_COLOR };
 		for (int i = 0; i < lines.length; i ++) {
 			sign.setLine(i, CommonsHelper.replaceAll(lines[i], farmSignKeywords, replacements));
 		}
@@ -89,7 +96,7 @@ sealed class FarmBuilder permits CactusBuilder, DirectionalFarmBuilder, Mushroom
 	}
 
 	final Location getSignLocation(Island island) {
-		return new Location(island.world(), getFarmfieldX(island) + 2, getFarmfieldY(island) + 1, getFarmfieldZ(island) - 2);
+		return new Location(island.world(), getFarmfieldX(island) + SIGN_X_OFFSET, getFarmfieldY(island) + SIGN_Y_OFFSET, getFarmfieldZ(island) + SIGN_Z_OFFSET);
 	}
 
 	final void setType(FarmType type) {

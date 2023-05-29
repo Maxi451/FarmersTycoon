@@ -1,5 +1,6 @@
 package it.tristana.farmingtycoon.farm;
 
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import it.tristana.commons.interfaces.Tickable;
@@ -9,7 +10,8 @@ import it.tristana.farmingtycoon.database.FarmingUser;
 
 public class Farm implements Tickable {
 
-	private static final SettingsFarm settings = JavaPlugin.getPlugin(Main.class).getSettingsFarm();
+	private static final Main plugin = JavaPlugin.getPlugin(Main.class);
+	private static final SettingsFarm settings = plugin.getSettingsFarm();
 	
 	private FarmingUser owner;
 	private FarmType farmType;
@@ -34,17 +36,13 @@ public class Farm implements Tickable {
 		recalcNextBuyPrice();
 		recalcNextUpgradePrice();
 		recalcMoneyPerSecond();
+		Bukkit.getScheduler().runTask(plugin, this::updateSign);
 	}
 
 	@Override
 	public void runTick() {
-		if (amount == 0) {
-			return;
-		}
-
 		owner.giveMoney(cachedIncomePerSecond);
 		totalIncome += cachedIncomePerSecond;
-		farmType.update(owner.getIsland(), level, cachedIncomePerSecond, cachedNextBuyPrice, owner.getMoney());
 	}
 
 	public FarmingUser getOwner() {
@@ -55,11 +53,12 @@ public class Farm implements Tickable {
 		return farmType;
 	}
 
-	public void upgrade() {
+	public void buy() {
 		farmType.build(owner.getIsland(), amount);
 		amount ++;
-		recalcNextUpgradePrice();
+		recalcNextBuyPrice();
 		recalcMoneyPerSecond();
+		updateSign();
 	}
 
 	public int getAmount() {
@@ -89,6 +88,10 @@ public class Farm implements Tickable {
 
 	public double getIncomePerSecond() {
 		return cachedIncomePerSecond;
+	}
+	
+	private void updateSign() {
+		farmType.update(owner.getIsland(), level, cachedIncomePerSecond, cachedNextBuyPrice, owner.getMoney());
 	}
 
 	private void recalcNextBuyPrice() {

@@ -38,6 +38,7 @@ public class FarmingUser extends BasicUser implements BalanceHolder, Tickable {
 		for (Farm farm : farms) {
 			farm.runTick();
 		}
+		grassField.runTick();
 	}
 
 	@Override
@@ -73,7 +74,7 @@ public class FarmingUser extends BasicUser implements BalanceHolder, Tickable {
 			FarmType.asList().forEach(type -> type.update(island));
 		});
 		
-		CommonsHelper.broadcast("&aLoaded " + player.getName() + "'s data! farms == null ? " + (farms == null));
+		CommonsHelper.broadcast("&aIsland created for " + player.getName());
 	}
 	
 	public Island getIsland() {
@@ -82,6 +83,10 @@ public class FarmingUser extends BasicUser implements BalanceHolder, Tickable {
 	
 	public Farm fromFarmType(FarmType type) {
 		return farms[type.ordinal()];
+	}
+	
+	public GrassField getGrassField() {
+		return grassField;
 	}
 	
 	Farm[] getFarms() {
