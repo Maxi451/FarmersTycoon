@@ -20,9 +20,11 @@ public class ConfigMessages extends Config {
 	public static final String GRASS_PERFECT_CLEAR_SUBTITLE = "grass-perfect-clear-subtitle";
 	public static final String GRASS_FAILED_PERFECT_CLEAR_TITLE = "grass-failed-perfect-clear-title";
 	public static final String GRASS_FAILED_PERFECT_CLEAR_SUBTITLE = "grass-failed-perfect-clear-subtitle";
-	
+
 	public static final String PLAYER_OFFLINE = "player-offline";
 	public static final String NOT_A_DOUBLE = "not-a-double";
+	public static final String NOT_EXISTING_PLAYER = "not-existing-player";
+	public static final String CREATING_ISLAND = "creating-island";
 
 	private static final String COMMAND_GO = COMMAND + "go.";
 	public static final String COMMAND_GO_EXECUTED = COMMAND_GO + EXECUTED;
@@ -68,9 +70,10 @@ public class ConfigMessages extends Config {
 		set(GRASS_PERFECT_CLEAR_SUBTITLE, "&aMultiplier &6{old}x &a-> &6{new}x");
 		set(GRASS_FAILED_PERFECT_CLEAR_TITLE, "&4&lFailed!");
 		set(GRASS_FAILED_PERFECT_CLEAR_SUBTITLE, "&cMultiplier &6{old}x &a-> &61.00x");
-		
+
 		set(PLAYER_OFFLINE, "&cThat player is offline!");
 		set(NOT_A_DOUBLE, "&cThat isn't a valid number!");
+		set(NOT_EXISTING_PLAYER, "&cThat player never joined the server");
 
 		set(COMMAND_GO_EXECUTED, "&aWhoosh!");
 		set(COMMAND_GO_HELP, "Teleports back to your island");

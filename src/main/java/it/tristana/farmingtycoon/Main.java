@@ -97,6 +97,7 @@ public class Main extends PluginDraft implements Reloadable, DatabaseHolder {
 		settingsFarm.reload();
 		settingsIslands.reload();
 		settingsScoreboard.reload();
+		scoreboardManager.reload();
 	}
 
 	@Override
@@ -171,7 +172,11 @@ public class Main extends PluginDraft implements Reloadable, DatabaseHolder {
 
 	private void startClocks() {
 		autosaveClock = new Clock();
-		autosaveClock.add(() -> usersManager.saveOnlineUsers());
+		autosaveClock.add(() -> {
+			CommonsHelper.consoleInfo("Saving FarmingTycoon players...");
+			usersManager.saveOnlineUsers();
+			CommonsHelper.consoleInfo("...done!");
+		});
 		autosaveClock.schedule(this, SAVE_TIMEOUT);
 
 		usersClock = new Clock();

@@ -1,5 +1,7 @@
 package it.tristana.farmingtycoon.farm;
 
+import static it.tristana.farmingtycoon.helper.NumberFormat.format;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -16,7 +18,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import it.tristana.commons.helper.CommonsHelper;
 import it.tristana.farmingtycoon.Main;
-import static it.tristana.farmingtycoon.helper.NumberFormat.format;
 
 sealed class FarmBuilder permits CactusBuilder, DirectionalFarmBuilder, MushroomBuilder, SugarCaneBuilder {
 
@@ -74,10 +75,6 @@ sealed class FarmBuilder permits CactusBuilder, DirectionalFarmBuilder, Mushroom
 	}
 
 	final void updateSign(Island island, int level, double incomePerSecond, double nextUpgradePrice, double money) {
-		if (type == FarmType.WHEAT) {
-			CommonsHelper.broadcast(String.format("Updating sign with %.2f income and %.2f nextUpgradePrice", incomePerSecond, nextUpgradePrice));
-		}
-
 		Block block = getSignLocation(island).getBlock();
 		if (block.getType() != Material.OAK_WALL_SIGN) {
 			block.setType(Material.OAK_WALL_SIGN, false);

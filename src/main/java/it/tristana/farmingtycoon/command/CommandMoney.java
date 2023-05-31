@@ -28,7 +28,7 @@ public class CommandMoney extends FarmSubCommand {
 			return;
 		}
 
-		usersManager.getUser(target).giveMoney(money);
+		getUser(target).giveMoney(money);
 		CommonsHelper.info(sender, settingsMessages.getCommandMoneyExecuted());
 	}
 

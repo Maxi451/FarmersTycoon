@@ -5,12 +5,17 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import it.tristana.commons.helper.CommonsHelper;
+import it.tristana.farmingtycoon.Main;
 import it.tristana.farmingtycoon.database.FarmingUser;
 
 public class CommandGo extends FarmSubCommand {
 
+	private final Main plugin;
+
 	public CommandGo(FarmCommand main, String name, String permission) {
 		super(main, name, permission);
+		this.plugin = main.getPlugin();
 	}
 
 	@Override
@@ -20,25 +25,26 @@ public class CommandGo extends FarmSubCommand {
 			teleportToIslandOf(player, usersManager.getUser(player));
 			return;
 		}
-		
+
 		Player other = Bukkit.getPlayerExact(args[1]);
 		if (other != null) {
 			teleportToIslandOf(player, usersManager.getUser(other));
 			return;
 		}
-		
+
 		new Thread(() -> {
 			@SuppressWarnings("deprecation")
 			OfflinePlayer offline = Bukkit.getOfflinePlayer(args[1]);
-			FarmingUser user = main.getPlugin().getStorage().getUser(offline, false);
+			FarmingUser user = plugin.getStorage().getUser(offline, false);
 			if (user == null) {
-				// TODO
+				CommonsHelper.info(sender, settingsMessages.getNotExistingPlayer());
 				return;
 			}
-			teleportToIslandOf(player, user);
+
+			Bukkit.getScheduler().runTask(plugin, () -> teleportToIslandOf(player, user));
 		}).start();
 	}
-	
+
 	@Override
 	protected boolean requiresPlayer() {
 		return true;
@@ -48,8 +54,13 @@ public class CommandGo extends FarmSubCommand {
 	protected String getHelp() {
 		return settingsMessages.getCommandGoHelp();
 	}
-	
+
 	private void teleportToIslandOf(Player player, FarmingUser user) {
+		if (!user.isLoaded()) {
+			CommonsHelper.info(player, settingsMessages.getCreatingIsland());
+			return;
+		}
+
 		player.teleport(user.getIsland().getSpawnpoint());
 	}
 }

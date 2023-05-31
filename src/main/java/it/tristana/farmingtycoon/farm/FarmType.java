@@ -40,6 +40,7 @@ public enum FarmType {
 		}
 		typesAsList = Collections.unmodifiableList(Arrays.asList(types));
 		settings = JavaPlugin.getPlugin(Main.class).getSettingsFarm();
+		
 	}
 
 	private final FarmBuilder builder;
@@ -81,7 +82,7 @@ public enum FarmType {
 	public void build(Island island, int row) {
 		builder.build(island, row);
 	}
-	
+
 	public void update(Island island) {
 		builder.updateSign(island);
 	}
@@ -97,7 +98,7 @@ public enum FarmType {
 	public double getBaseIncome() {
 		return baseIncomeSupplier.get(settings);
 	}
-	
+
 	public double getBaseBuyPrice() {
 		return baseBuyPriceSupplier.get(settings);
 	}

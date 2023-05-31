@@ -43,6 +43,7 @@ public class Farm implements Tickable {
 	public void runTick() {
 		owner.giveMoney(cachedIncomePerSecond);
 		totalIncome += cachedIncomePerSecond;
+		updateSign();
 	}
 
 	public FarmingUser getOwner() {

@@ -20,13 +20,13 @@ public class FarmingScoreboardManager extends BasicScoreboardManager<FarmingUser
 
 	private Main plugin;
 	private SettingsScoreboard settings;
-	
+
 	public FarmingScoreboardManager(Main plugin, SettingsScoreboard settings) {
 		this.plugin = plugin;
 		this.settings = settings;
 		reload();
 	}
-	
+
 	@Override
 	public Collection<Objective> createObjectives(FarmingUser user, Scoreboard scoreboard) {
 		Collection<Objective> objectives = new HashSet<>();

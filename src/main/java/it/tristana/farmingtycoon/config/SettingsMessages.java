@@ -7,7 +7,7 @@ import it.tristana.commons.config.Settings;
 public class SettingsMessages extends Settings<ConfigMessages> {
 
 	private static final String[] EMPTY_ARRAY = {};
-	
+
 	private String[] units;
 
 	private String waitingProfileLoad;
@@ -15,15 +15,17 @@ public class SettingsMessages extends Settings<ConfigMessages> {
 	private String grassPerfectClearSubtitle;
 	private String grassFailedPerfectClearTitle;
 	private String grassFailedPerfectClearSubtitle;
-	
+
 	private String playerOffline;
 	private String notADouble;
+	private String notExistingPlayer;
+	private String creatingIsland;
 
 	private String commandGoExecuted;
 	private String commandGoHelp;
 	private String commandMoneyExecuted;
 	private String commandMoneyHelp;
-	
+
 	public SettingsMessages(File folder) {
 		super(folder, ConfigMessages.class);
 	}
@@ -40,14 +42,24 @@ public class SettingsMessages extends Settings<ConfigMessages> {
 
 		playerOffline = config.getString(ConfigMessages.PLAYER_OFFLINE);
 		notADouble = config.getString(ConfigMessages.NOT_A_DOUBLE);
-		
+		notExistingPlayer = config.getString(ConfigMessages.NOT_EXISTING_PLAYER);
+		creatingIsland = config.getString(ConfigMessages.CREATING_ISLAND);
+
 		commandGoExecuted = config.getString(ConfigMessages.COMMAND_GO_EXECUTED);
 		commandGoHelp = config.getString(ConfigMessages.COMMAND_GO_HELP);
-		
+
 		commandMoneyExecuted = config.getString(ConfigMessages.COMMAND_MONEY_EXECUTED);
 		commandMoneyHelp = config.getString(ConfigMessages.COMMAND_MONEY_HELP);
 	}
-	
+
+	public String getCreatingIsland() {
+		return creatingIsland;
+	}
+
+	public String getNotExistingPlayer() {
+		return notExistingPlayer;
+	}
+
 	public String getCommandMoneyExecuted() {
 		return commandMoneyExecuted;
 	}
