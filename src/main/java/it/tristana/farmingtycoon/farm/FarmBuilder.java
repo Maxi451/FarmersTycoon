@@ -61,7 +61,7 @@ sealed class FarmBuilder permits CactusBuilder, DirectionalFarmBuilder, Mushroom
 
 	final void build(Island island, int row) {
 		World world = island.world();
-		int x = getFarmfieldX(island);
+		int x = getFarmfieldX(island, type);
 		int y = getFarmfieldY(island);
 		int z = getFarmfieldZ(island) + row;
 		if (row == 0) {
@@ -91,9 +91,13 @@ sealed class FarmBuilder permits CactusBuilder, DirectionalFarmBuilder, Mushroom
 		}
 		sign.update(false, false);
 	}
+	
+	final boolean isItemFrameLocation(Island island, Location location) {
+		
+	}
 
 	final Location getSignLocation(Island island) {
-		return new Location(island.world(), getFarmfieldX(island) + SIGN_X_OFFSET, getFarmfieldY(island) + SIGN_Y_OFFSET, getFarmfieldZ(island) + SIGN_Z_OFFSET);
+		return new Location(island.world(), getFarmfieldX(island, type) + SIGN_X_OFFSET, getFarmfieldY(island) + SIGN_Y_OFFSET, getFarmfieldZ(island) + SIGN_Z_OFFSET);
 	}
 
 	final void setType(FarmType type) {
@@ -167,15 +171,15 @@ sealed class FarmBuilder permits CactusBuilder, DirectionalFarmBuilder, Mushroom
 
 	void updateDirection(Block block, Directional directional) {}
 
-	private final int getFarmfieldX(Island island) {
+	private static int getFarmfieldX(Island island, FarmType type) {
 		return island.posX() + X_OFFSET + (WIDTH + 1) * type.ordinal();
 	}
 
-	private final int getFarmfieldY(Island island) {
+	private static int getFarmfieldY(Island island) {
 		return island.posY() + Y_OFFSET;
 	}
 
-	private final int getFarmfieldZ(Island island) {
+	private static int getFarmfieldZ(Island island) {
 		return island.posZ() + Z_OFFSET;
 	}
 }

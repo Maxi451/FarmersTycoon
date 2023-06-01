@@ -40,7 +40,7 @@ public enum FarmType {
 		}
 		typesAsList = Collections.unmodifiableList(Arrays.asList(types));
 		settings = JavaPlugin.getPlugin(Main.class).getSettingsFarm();
-		
+
 	}
 
 	private final FarmBuilder builder;
@@ -68,6 +68,16 @@ public enum FarmType {
 	public static FarmType fromSign(Island island, Location location) {
 		for (FarmType type : types) {
 			if (CommonsHelper.samePosInt(type.builder.getSignLocation(island), location)) {
+				return type;
+			}
+		}
+
+		return null;
+	}
+
+	public static FarmType fromItemFrame(Island island, Location location) {
+		for (FarmType type : types) {
+			if (type.builder.isItemFrameLocation(island, location)) {
 				return type;
 			}
 		}

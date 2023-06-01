@@ -29,6 +29,7 @@ import it.tristana.farmingtycoon.farm.IslandsManager;
 import it.tristana.farmingtycoon.helper.FarmingPapiHook;
 import it.tristana.farmingtycoon.listener.GrassListener;
 import it.tristana.farmingtycoon.listener.RemovedEventsListener;
+import it.tristana.farmingtycoon.listener.UpgradeListener;
 import it.tristana.farmingtycoon.scoreboard.FarmingScoreboardManager;
 
 public class Main extends PluginDraft implements Reloadable, DatabaseHolder {
@@ -166,7 +167,8 @@ public class Main extends PluginDraft implements Reloadable, DatabaseHolder {
 			usersClock.remove(user);
 			scoreboardManager.removeUser(user);
 		}));
-		register(new GrassListener(usersManager, islandsManager));
+		register(new GrassListener(islandsManager));
+		register(new UpgradeListener(usersManager, islandsManager));
 		register(new RemovedEventsListener());
 	}
 
